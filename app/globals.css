@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 15 15 18;
+  --fg: 245 245 248;
+}
+
+html { 
+  scroll-behavior: smooth; 
+}
+
+body { 
+  @apply bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 antialiased transition-colors duration-300; 
+}
+
+.container { 
+  @apply mx-auto max-w-6xl px-4; 
+}
+
+.prose a { 
+  @apply text-brand underline underline-offset-4; 
+}
+
+.card { 
+  @apply rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/50 shadow-lg shadow-black/5 dark:shadow-black/30 backdrop-blur-sm; 
+}
+
+.badge { 
+  @apply inline-flex items-center gap-1 rounded-full border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 px-3 py-1 text-xs text-neutral-700 dark:text-neutral-300; 
+}
+
+.btn { 
+  @apply inline-flex items-center justify-center rounded-xl bg-brand px-4 py-2 font-medium hover:bg-brand-dark transition-colors duration-200 text-white; 
+}
+
+.link { 
+  @apply inline-flex items-center gap-2 text-brand hover:text-brand-light transition-colors duration-200; 
+}
+
+/* Gradient mesh background */
+.gradient-mesh {
+  background: linear-gradient(45deg, #7C3AED, #EC4899, #06B6D4, #10B981);
+  background-size: 400% 400%;
+  animation: gradient 8s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Particle field */
+.particle-field {
+  position: relative;
+  overflow: hidden;
+}
+
+.particle-field::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.3) 0%, transparent 50%);
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Mobile drawer */
+.mobile-drawer {
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.mobile-drawer.open {
+  transform: translateX(0);
+}
+
+/* Hover effects */
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
