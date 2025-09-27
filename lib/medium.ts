@@ -98,7 +98,7 @@ function cleanCategories(categories: string[]): string[] {
 
 export async function fetchMediumPosts(): Promise<MediumPost[]> {
   try {
-    const mediumRSSUrl = 'https://medium.com/@VoxHash/feed';
+    const mediumRSSUrl = 'https://medium.com/@'+(process.env.MEDIUM_HANDLE||"voxhash")+'/feed';
     
     const response = await fetch(mediumRSSUrl, {
       headers: {

@@ -1,4 +1,4 @@
-import { Monitor, Keyboard, Mouse, Headphones, Coffee, Wifi, Cpu, HardDrive, MemoryStick, Smartphone } from "lucide-react";
+import { Monitor, Keyboard, Mouse, Headphones, Coffee, Wifi, Cpu, HardDrive, MemoryStick, Smartphone, Mic, Gamepad2 } from "lucide-react";
 
 interface Tool {
   name: string;
@@ -39,6 +39,30 @@ const tools: Tool[] = [
     description: 'Mobile device for testing and communication',
     category: 'hardware',
     icon: <Smartphone className="h-6 w-6" />
+  },
+  {
+    name: 'Gaming Laptop (Arch Linux)',
+    description: 'ASUS ROG with GTX 3050 Ti, 32GB RAM, 2TB NVMe SSD',
+    category: 'hardware',
+    icon: <Monitor className="h-6 w-6" />
+  },
+  {
+    name: 'Gaming PC (Windows 11)',
+    description: 'Custom build with GTX 4060, 42GB RAM, 4TB SSD',
+    category: 'hardware',
+    icon: <Cpu className="h-6 w-6" />
+  },
+  {
+    name: 'HyperX QuadCast',
+    description: 'Professional USB microphone for streaming and recording',
+    category: 'hardware',
+    icon: <Mic className="h-6 w-6" />
+  },
+  {
+    name: 'Meta Quest 3',
+    description: 'VR headset for immersive development and gaming',
+    category: 'hardware',
+    icon: <Gamepad2 className="h-6 w-6" />
   },
 
   // Development Software
@@ -139,7 +163,7 @@ const tools: Tool[] = [
     icon: <Cpu className="h-6 w-6" />
   },
   {
-    name: '1Password',
+    name: 'Keeper Password Manager',
     description: 'Password manager and secure vault for credentials',
     category: 'productivity',
     icon: <Cpu className="h-6 w-6" />
@@ -227,7 +251,7 @@ export default function UsesPage() {
         <div className="card p-8 bg-gradient-to-r from-brand/10 to-brand-light/10 border-brand/20">
           <h3 className="text-2xl font-semibold mb-6 text-center">Development Environment</h3>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 text-center">
             <div>
               <h4 className="text-lg font-medium mb-4 text-brand">VS Code Extensions</h4>
               <ul className="space-y-2 text-sm text-neutral-600 dark:text-neutral-300">

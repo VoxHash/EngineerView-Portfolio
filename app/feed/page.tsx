@@ -1,121 +1,27 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Calendar, Heart, MessageCircle, Share, ExternalLink, Linkedin } from "lucide-react";
+import { Calendar, Heart, MessageCircle, Share, ExternalLink, Linkedin, Hash, AtSign } from "lucide-react";
 import { format } from "date-fns";
-
-interface LinkedInPost {
-  id: string;
-  content: string;
-  author: {
-    name: string;
-    title: string;
-    company: string;
-    avatar: string;
-  };
-  publishedAt: string;
-  likes: number;
-  comments: number;
-  shares: number;
-  type: 'text' | 'image' | 'article' | 'video';
-  imageUrl?: string;
-  articleUrl?: string;
-  articleTitle?: string;
-  articleDescription?: string;
-}
-
-// Mock LinkedIn posts data
-const mockPosts: LinkedInPost[] = [
-  {
-    id: "1",
-    content: "Just shipped a major feature for our AI-powered portfolio platform! 🚀 The new dynamic OG image generation is working beautifully, creating personalized social media previews for each page. Built with Next.js 14 and @vercel/og - the developer experience is incredible!",
-    author: {
-      name: "VoxHash",
-      title: "Senior Software Engineer",
-      company: "TechCorp Inc.",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-    },
-    publishedAt: "2024-01-20T10:30:00Z",
-    likes: 42,
-    comments: 8,
-    shares: 12,
-    type: "text"
-  },
-  {
-    id: "2",
-    content: "Excited to share my latest blog post about building scalable Next.js applications! The article covers everything from performance optimization to deployment strategies. Check it out if you're working with React/Next.js!",
-    author: {
-      name: "VoxHash",
-      title: "Senior Software Engineer",
-      company: "TechCorp Inc.",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-    },
-    publishedAt: "2024-01-18T14:15:00Z",
-    likes: 28,
-    comments: 5,
-    shares: 7,
-    type: "article",
-    articleUrl: "/blog/building-scalable-nextjs-apps",
-    articleTitle: "Building Scalable Next.js Applications",
-    articleDescription: "Learn how to architect and build production-ready Next.js applications that can handle millions of users with proper performance optimization techniques."
-  },
-  {
-    id: "3",
-    content: "Had an amazing time speaking at the React Conference 2024! 🎤 Shared insights about modern web development patterns and the future of AI integration in frontend applications. The Q&A session was particularly engaging!",
-    author: {
-      name: "VoxHash",
-      title: "Senior Software Engineer",
-      company: "TechCorp Inc.",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-    },
-    publishedAt: "2024-01-15T16:45:00Z",
-    likes: 67,
-    comments: 15,
-    shares: 23,
-    type: "text"
-  },
-  {
-    id: "4",
-    content: "Open source contribution of the week: Just merged a PR that improves TypeScript support in our CLI tool. The type safety improvements will help developers catch errors earlier in their workflow. Always happy to give back to the community! 💻",
-    author: {
-      name: "VoxHash",
-      title: "Senior Software Engineer",
-      company: "TechCorp Inc.",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-    },
-    publishedAt: "2024-01-12T09:20:00Z",
-    likes: 35,
-    comments: 6,
-    shares: 9,
-    type: "text"
-  },
-  {
-    id: "5",
-    content: "Working on something exciting! 🤫 Building a new AI-powered development tool that will help developers write better code faster. Can't wait to share more details soon. The intersection of AI and developer productivity is fascinating!",
-    author: {
-      name: "VoxHash",
-      title: "Senior Software Engineer",
-      company: "TechCorp Inc.",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-    },
-    publishedAt: "2024-01-10T11:30:00Z",
-    likes: 89,
-    comments: 22,
-    shares: 18,
-    type: "text"
-  }
-];
+import { fetchLinkedInPosts, type LinkedInPost } from "@/lib/linkedin";
 
 export default function FeedPage() {
   const [posts, setPosts] = useState<LinkedInPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Simulate API call delay
     const fetchPosts = async () => {
-      setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setPosts(mockPosts);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        setError(null);
+        const linkedInPosts = await fetchLinkedInPosts();
+        setPosts(linkedInPosts);
+      } catch (err) {
+        console.error('Error fetching LinkedIn posts:', err);
+        setError('Failed to load LinkedIn posts');
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchPosts();
@@ -153,6 +59,27 @@ export default function FeedPage() {
     );
   }
 
+  if (error) {
+    return (
+      <div className="py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-4">
+            LinkedIn <span className="text-brand">Feed</span>
+          </h1>
+          <p className="text-lg text-red-600 dark:text-red-400 mb-8">
+            {error}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="btn hover-glow"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="py-12">
       <div className="text-center mb-12">
@@ -160,9 +87,9 @@ export default function FeedPage() {
           LinkedIn <span className="text-brand">Feed</span>
         </h1>
         <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto mb-8">
-          Latest posts and updates from my professional journey. 
+          Latest posts and updates from my professional journey on LinkedIn. 
           <span className="text-sm text-neutral-500 dark:text-neutral-400 block mt-2">
-            Note: This is a demo feed. In a real implementation, this would connect to LinkedIn's API.
+            Featuring my thoughts on web development, AI integration, and building scalable applications.
           </span>
         </p>
         
@@ -204,9 +131,49 @@ export default function FeedPage() {
             {/* Post Content */}
             <div className="mb-4">
               <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed whitespace-pre-line">
-                {post.content}
+                {post.content.split(' ').map((word, index) => {
+                  if (word.startsWith('#')) {
+                    return (
+                      <span key={index} className="text-brand hover:text-brand-dark font-medium cursor-pointer">
+                        {word}{' '}
+                      </span>
+                    );
+                  }
+                  if (word.startsWith('@')) {
+                    return (
+                      <span key={index} className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium cursor-pointer">
+                        {word}{' '}
+                      </span>
+                    );
+                  }
+                  return word + ' ';
+                })}
               </p>
             </div>
+
+            {/* Hashtags and Mentions */}
+            {(post.hashtags?.length || post.mentions?.length) && (
+              <div className="mb-4 flex flex-wrap gap-2">
+                {post.hashtags?.map((hashtag, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center gap-1 text-xs bg-brand/10 text-brand px-2 py-1 rounded-full hover:bg-brand/20 transition-colors cursor-pointer"
+                  >
+                    <Hash className="h-3 w-3" />
+                    {hashtag.replace('#', '')}
+                  </span>
+                ))}
+                {post.mentions?.map((mention, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center gap-1 text-xs bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-2 py-1 rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/30 transition-colors cursor-pointer"
+                  >
+                    <AtSign className="h-3 w-3" />
+                    {mention.replace('@', '')}
+                  </span>
+                ))}
+              </div>
+            )}
 
             {/* Article Preview */}
             {post.type === 'article' && post.articleUrl && (
