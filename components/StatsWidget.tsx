@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { Eye, TrendingUp, Users, Activity } from 'lucide-react';
+import { Eye, TrendingUp, Users, Activity, Clock, BarChart3 } from 'lucide-react';
 
 interface VisitorStats {
   visitors: number;
@@ -19,10 +19,11 @@ interface PlausibleStats {
   };
 }
 
-export default function VisitorCounter() {
+export default function StatsWidget() {
   const [stats, setStats] = useState<VisitorStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -123,20 +124,35 @@ export default function VisitorCounter() {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
+  const formatTimeAgo = (timestamp: string) => {
+    const now = new Date();
+    const updated = new Date(timestamp);
+    const diffInMinutes = Math.floor((now.getTime() - updated.getTime()) / (1000 * 60));
+    
+    if (diffInMinutes < 1) return 'just now';
+    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
+    return `${Math.floor(diffInMinutes / 1440)}d ago`;
+  };
+
   if (isLoading) {
     return (
-      <div className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-        <Eye className="h-4 w-4 animate-pulse" />
-        <span>Loading stats...</span>
+      <div className="card p-4">
+        <div className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
+          <Activity className="h-4 w-4 animate-pulse" />
+          <span>Loading analytics...</span>
+        </div>
       </div>
     );
   }
 
   if (error && !stats) {
     return (
-      <div className="flex items-center gap-2 text-sm text-red-500 dark:text-red-400">
-        <Activity className="h-4 w-4" />
-        <span>Stats unavailable</span>
+      <div className="card p-4">
+        <div className="flex items-center gap-2 text-sm text-red-500 dark:text-red-400">
+          <Activity className="h-4 w-4" />
+          <span>Analytics unavailable</span>
+        </div>
       </div>
     );
   }
@@ -146,19 +162,71 @@ export default function VisitorCounter() {
   }
 
   return (
-    <div className="flex items-center gap-4 text-sm text-neutral-500 dark:text-neutral-400">
-      <div className="flex items-center gap-1">
-        <Users className="h-4 w-4" />
-        <span>{stats.visitors.toLocaleString()}</span>
+    <div className="card p-4">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+          <BarChart3 className="h-4 w-4" />
+          Site Analytics
+        </h3>
+        <button
+          onClick={() => setShowDetails(!showDetails)}
+          className="text-xs text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 transition-colors"
+        >
+          {showDetails ? 'Hide' : 'Show'} details
+        </button>
       </div>
-      <div className="flex items-center gap-1">
-        <Eye className="h-4 w-4" />
-        <span>{stats.pageviews.toLocaleString()}</span>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex items-center gap-2">
+          <Users className="h-4 w-4 text-blue-500" />
+          <div>
+            <div className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+              {stats.visitors.toLocaleString()}
+            </div>
+            <div className="text-xs text-neutral-500 dark:text-neutral-400">Visitors</div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Eye className="h-4 w-4 text-green-500" />
+          <div>
+            <div className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+              {stats.pageviews.toLocaleString()}
+            </div>
+            <div className="text-xs text-neutral-500 dark:text-neutral-400">Pageviews</div>
+          </div>
+        </div>
       </div>
-      <div className="flex items-center gap-1">
-        <TrendingUp className="h-4 w-4" />
-        <span>{formatDuration(stats.visit_duration)}</span>
-      </div>
+
+      {showDetails && (
+        <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-purple-500" />
+              <div>
+                <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                  {stats.bounce_rate}%
+                </div>
+                <div className="text-xs text-neutral-500 dark:text-neutral-400">Bounce Rate</div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-orange-500" />
+              <div>
+                <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                  {formatDuration(stats.visit_duration)}
+                </div>
+                <div className="text-xs text-neutral-500 dark:text-neutral-400">Avg. Duration</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-3 text-xs text-neutral-400 dark:text-neutral-500">
+            Last updated: {formatTimeAgo(stats.last_updated)}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

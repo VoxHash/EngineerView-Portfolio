@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Star, GitFork, GitCommit, Users, TrendingUp, Calendar } from "lucide-react";
 import { SITE } from "@/lib/site";
+import StatsWidget from "@/components/StatsWidget";
 
 interface RepoMetrics {
   name: string;
@@ -121,6 +122,14 @@ export default function MetricsPage() {
         <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
           GitHub statistics and open source project metrics showcasing my contributions and impact.
         </p>
+      </div>
+
+      {/* Site Analytics */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold mb-6 text-center">Site Analytics</h2>
+        <div className="max-w-md mx-auto">
+          <StatsWidget />
+        </div>
       </div>
 
       {/* Overall Stats */}

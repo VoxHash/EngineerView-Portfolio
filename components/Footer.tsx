@@ -6,7 +6,7 @@ export default function Footer(){
     <footer className="border-t border-neutral-200 dark:border-neutral-800 mt-16 py-10">
       <div className="container flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-400">
         <div className="flex flex-col md:flex-row items-center gap-4">
-          <p>© {new Date().getFullYear()} VoxHash — All rights reserved.</p>
+          <p>© {new Date().getFullYear()} VoxHash Technologies Ltd — All rights reserved.</p>
           <VisitorCounter />
         </div>
         <div className="flex flex-wrap gap-4">
