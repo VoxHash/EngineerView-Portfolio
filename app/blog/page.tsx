@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Calendar, Clock, ArrowRight, Rss } from "lucide-react";
+import { Calendar, Clock, ArrowRight, Rss, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import type { Metadata } from "next";
 import { getPageOGImage } from "@/lib/og";
+import { fetchMediumPosts, type MediumPost } from "@/lib/medium";
 
 export const metadata: Metadata = {
   title: "Blog & Tutorials - VoxHash",
@@ -18,47 +19,22 @@ export const metadata: Metadata = {
   }
 };
 
-// Mock blog posts data - in a real app, this would come from a CMS or file system
-const blogPosts = [
-  {
-    slug: "building-scalable-nextjs-apps",
-    title: "Building Scalable Next.js Applications",
-    excerpt: "Learn how to architect and build production-ready Next.js applications that can handle millions of users with proper performance optimization techniques.",
-    date: "2024-01-15",
-    readTime: "8 min read",
-    tags: ["Next.js", "Performance", "Architecture"],
-    featured: true
-  },
-  {
-    slug: "ai-integration-guide",
-    title: "Complete Guide to AI Integration in Web Apps",
-    excerpt: "A comprehensive guide to integrating AI capabilities into your web applications, covering everything from API design to user experience considerations.",
-    date: "2024-01-10",
-    readTime: "12 min read",
-    tags: ["AI", "Web Development", "Tutorial"],
-    featured: true
-  },
-  {
-    slug: "typescript-best-practices",
-    title: "TypeScript Best Practices for Large Codebases",
-    excerpt: "Essential TypeScript patterns and practices that will help you maintain clean, scalable code in large applications.",
-    date: "2024-01-05",
-    readTime: "6 min read",
-    tags: ["TypeScript", "Best Practices", "Code Quality"],
-    featured: false
-  },
-  {
-    slug: "modern-css-techniques",
-    title: "Modern CSS Techniques for Better UX",
-    excerpt: "Explore advanced CSS techniques including container queries, CSS Grid, and modern layout patterns that enhance user experience.",
-    date: "2024-01-01",
-    readTime: "10 min read",
-    tags: ["CSS", "UX", "Frontend"],
-    featured: false
-  }
-];
+export default async function BlogPage() {
+  // Fetch posts from Medium
+  const mediumPosts = await fetchMediumPosts();
+  
+  // Convert Medium posts to the format expected by the UI
+  const blogPosts = mediumPosts.map(post => ({
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.description,
+    date: post.pubDate,
+    readTime: post.readTime,
+    tags: post.categories,
+    featured: post.featured,
+    link: post.link
+  }));
 
-export default function BlogPage() {
   const featuredPosts = blogPosts.filter(post => post.featured);
   const regularPosts = blogPosts.filter(post => !post.featured);
 
@@ -70,9 +46,18 @@ export default function BlogPage() {
         </h1>
         <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto mb-6">
           Thoughts on web development, AI integration, and building scalable applications. 
-          Sharing knowledge and experiences from the trenches.
+          Sharing knowledge and experiences from the trenches on Medium.
         </p>
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center gap-4 flex-wrap">
+          <a 
+            href="https://medium.com/@VoxHash" 
+            className="badge hover:bg-brand/10 hover:text-brand transition-colors duration-200 flex items-center gap-2"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ExternalLink className="h-4 w-4" />
+            Follow on Medium
+          </a>
           <a 
             href="/rss.xml" 
             className="badge hover:bg-brand/10 hover:text-brand transition-colors duration-200 flex items-center gap-2"
@@ -134,13 +119,15 @@ export default function BlogPage() {
                   ))}
                 </div>
 
-                <Link 
-                  href={`/blog/${post.slug}`}
-                  className="link group-hover:text-brand transition-colors duration-200"
+                <a 
+                  href={post.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link group-hover:text-brand transition-colors duration-200 flex items-center gap-1"
                 >
-                  Read more
-                  <ArrowRight className="inline h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform duration-200" />
-                </Link>
+                  Read on Medium
+                  <ExternalLink className="inline h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
+                </a>
               </article>
             ))}
           </div>
@@ -194,13 +181,15 @@ export default function BlogPage() {
                   </div>
                 </div>
 
-                <Link 
-                  href={`/blog/${post.slug}`}
+                <a 
+                  href={post.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="link group-hover:text-brand transition-colors duration-200 flex items-center gap-1"
                 >
-                  Read more
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
-                </Link>
+                  Read on Medium
+                  <ExternalLink className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
+                </a>
               </div>
             </article>
           ))}
