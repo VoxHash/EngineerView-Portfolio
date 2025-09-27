@@ -41,14 +41,14 @@ const tools: Tool[] = [
     icon: <Smartphone className="h-6 w-6" />
   },
   {
-    name: 'Gaming Laptop (Arch Linux)',
-    description: 'ASUS ROG with GTX 3050 Ti, 32GB RAM, 2TB NVMe SSD',
+    name: 'Laptop (Arch Linux)',
+    description: 'Custom MSI Sword 15 with RTX 3050 Ti, 32GB RAM, 2TB NVMe SSD',
     category: 'hardware',
     icon: <Monitor className="h-6 w-6" />
   },
   {
-    name: 'Gaming PC (Windows 11)',
-    description: 'Custom build with GTX 4060, 42GB RAM, 4TB SSD',
+    name: 'PC (Windows 11)',
+    description: 'Custom build with RTX 4060, 42GB RAM, 4TB SSD',
     category: 'hardware',
     icon: <Cpu className="h-6 w-6" />
   },
