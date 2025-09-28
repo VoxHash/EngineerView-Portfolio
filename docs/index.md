@@ -150,8 +150,8 @@ This documentation is regularly updated to reflect:
 - Community feedback and suggestions
 - Best practices and patterns
 
-**Last Updated**: January 2024  
-**Next Review**: March 2024
+**Last Updated**: January 2025  
+**Next Review**: March 2025
 
 ---
 

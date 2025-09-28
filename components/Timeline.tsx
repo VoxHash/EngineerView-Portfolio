@@ -18,7 +18,7 @@ interface TimelineItem {
 const timelineData: TimelineItem[] = [
   {
     id: '1',
-    date: '2024 - Present',
+    date: '2025 - Present',
     title: 'Senior Full-Stack Engineer',
     company: 'VoxHash',
     location: 'Remote',

@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub issue and PR templates
 - Complete docs/ folder structure
 
-## [2.0.0] - 2024-01-15
+## [2.0.0] - 2025-01-15
 
 ### Added
 - **Theme System**

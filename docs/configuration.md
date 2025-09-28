@@ -381,7 +381,7 @@ Edit `components/Timeline.tsx` to update your career milestones:
 ```typescript
 const milestones = [
   {
-    year: "2024",
+    year: "2025",
     title: "Senior Developer",
     company: "Company Name",
     description: "Led development of major features",

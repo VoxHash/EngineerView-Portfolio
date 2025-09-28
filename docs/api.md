@@ -122,9 +122,9 @@ curl "http://localhost:3000/api/github/repos?username=voxhash&sort=updated&per_p
         "forks_count": 8,
         "language": "TypeScript",
         "topics": ["portfolio", "nextjs", "typescript"],
-        "created_at": "2024-01-01T00:00:00Z",
-        "updated_at": "2024-01-15T12:00:00Z",
-        "pushed_at": "2024-01-15T12:00:00Z"
+        "created_at": "2025-01-01T00:00:00Z",
+        "updated_at": "2025-01-15T12:00:00Z",
+        "pushed_at": "2025-01-15T12:00:00Z"
       }
     ],
     "total_count": 1,
@@ -132,7 +132,7 @@ curl "http://localhost:3000/api/github/repos?username=voxhash&sort=updated&per_p
     "per_page": 10,
     "has_more": false
   },
-  "timestamp": "2024-01-15T12:00:00Z"
+  "timestamp": "2025-01-15T12:00:00Z"
 }
 ```
 
@@ -304,7 +304,7 @@ curl -X POST "http://localhost:3000/api/contact" \
   "success": true,
   "message": "Thank you for your message! I will get back to you soon.",
   "messageId": "msg_123456789",
-  "timestamp": "2024-01-15T12:00:00Z"
+  "timestamp": "2025-01-15T12:00:00Z"
 }
 ```
 
@@ -495,7 +495,7 @@ interface APIError {
   "error": "VALIDATION_ERROR",
   "message": "Invalid email format",
   "code": "INVALID_EMAIL",
-  "timestamp": "2024-01-15T12:00:00Z",
+  "timestamp": "2025-01-15T12:00:00Z",
   "details": {
     "field": "email",
     "value": "invalid-email"
@@ -530,7 +530,7 @@ X-RateLimit-Reset: 1642248000
   "error": "RATE_LIMITED",
   "message": "Rate limit exceeded. Please try again later.",
   "code": "RATE_LIMIT_EXCEEDED",
-  "timestamp": "2024-01-15T12:00:00Z",
+  "timestamp": "2025-01-15T12:00:00Z",
   "retry_after": 3600
 }
 ```

@@ -13,7 +13,7 @@ We follow semantic versioning (MAJOR.MINOR.PATCH) with planned releases every 2-
 ## 🚀 Upcoming Releases
 
 ### v2.1.0 - Enhanced Content Management
-**Target Release: Q2 2024**
+**Target Release: Q2 2025**
 
 #### Features
 - [ ] **Advanced Blog System**
@@ -42,7 +42,7 @@ We follow semantic versioning (MAJOR.MINOR.PATCH) with planned releases every 2-
 - [ ] Better TypeScript coverage
 
 ### v2.2.0 - Multi-Platform Integration
-**Target Release: Q3 2024**
+**Target Release: Q3 2025**
 
 #### Features
 - [ ] **Social Media Integration**
@@ -70,7 +70,7 @@ We follow semantic versioning (MAJOR.MINOR.PATCH) with planned releases every 2-
 - [ ] Database integration for analytics
 
 ### v2.3.0 - Advanced Project Showcase
-**Target Release: Q4 2024**
+**Target Release: Q4 2025**
 
 #### Features
 - [ ] **Interactive Project Demos**
@@ -98,7 +98,7 @@ We follow semantic versioning (MAJOR.MINOR.PATCH) with planned releases every 2-
 - [ ] Performance monitoring dashboard
 
 ### v3.0.0 - Complete Platform Redesign
-**Target Release: Q1 2025**
+**Target Release: Q1 2026**
 
 #### Major Features
 - [ ] **Complete UI/UX Redesign**
@@ -145,7 +145,7 @@ We follow semantic versioning (MAJOR.MINOR.PATCH) with planned releases every 2-
 - [ ] Keyboard navigation support
 - [ ] Screen reader optimization
 
-## 🎯 Long-term Goals (2025+)
+## 🎯 Long-term Goals (2026+)
 
 ### Platform Expansion
 - [ ] **Portfolio Marketplace**
@@ -218,5 +218,5 @@ For questions about the roadmap or to suggest new features:
 
 ---
 
-**Last Updated**: January 2024  
-**Next Review**: March 2024
+**Last Updated**: January 2025  
+**Next Review**: March 2025

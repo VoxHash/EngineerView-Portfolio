@@ -198,5 +198,5 @@ This security policy is provided for informational purposes only. By reporting v
 
 ---
 
-**Last Updated**: January 2024  
-**Next Review**: March 2024
+**Last Updated**: January 2025  
+**Next Review**: March 2025

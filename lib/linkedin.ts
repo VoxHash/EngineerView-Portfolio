@@ -180,7 +180,7 @@ export async function fetchLinkedInPosts(): Promise<LinkedInPost[]> {
       },
       {
         id: "3",
-        content: "Had an amazing time speaking at the React Conference 2024! 🎤 Shared insights about modern web development patterns and the future of AI integration in frontend applications. The Q&A session was particularly engaging! #Speaking #React #WebDevelopment #AI",
+        content: "Had an amazing time speaking at the React Conference 2025! 🎤 Shared insights about modern web development patterns and the future of AI integration in frontend applications. The Q&A session was particularly engaging! #Speaking #React #WebDevelopment #AI",
         author: {
           name: SITE.name,
           title: "Senior Software Engineer",

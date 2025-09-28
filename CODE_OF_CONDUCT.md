@@ -110,4 +110,4 @@ This Code of Conduct is licensed under the [Creative Commons Attribution 4.0 Lic
 
 ---
 
-**Last Updated**: January 2024
+**Last Updated**: January 2025

@@ -85,7 +85,7 @@ npm run test:watch   # Run tests in watch mode
      {
        title: "Your Blog Post Title",
        slug: "your-post-slug",
-       date: "2024-01-15",
+       date: "2025-01-15",
        excerpt: "Your post excerpt...",
      },
    ];

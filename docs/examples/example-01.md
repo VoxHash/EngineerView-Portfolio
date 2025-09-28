@@ -206,7 +206,7 @@ Edit `components/Timeline.tsx`:
 ```typescript
 const milestones = [
   {
-    year: "2024",
+    year: "2025",
     title: "Senior Full-Stack Developer",
     company: "TechCorp",
     description: "Leading development of microservices architecture and mentoring junior developers",

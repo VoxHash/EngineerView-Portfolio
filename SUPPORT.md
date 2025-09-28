@@ -261,5 +261,5 @@ We appreciate your patience and understanding. Our support team works hard to he
 
 ---
 
-**Last Updated**: January 2024  
+**Last Updated**: January 2025  
 **Support Hours**: 24/7 for critical issues, Business hours for general support
