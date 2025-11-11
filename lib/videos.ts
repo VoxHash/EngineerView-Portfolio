@@ -7,7 +7,7 @@ export interface Video {
   thumbnail: string;
   url: string;
   publishedAt: string;
-  platform: 'youtube' | 'twitch' | 'kick' | 'vimeo';
+  platform: 'youtube' | 'twitch' | 'vimeo';
   duration?: string;
   viewCount?: number;
 }
@@ -60,17 +60,6 @@ export interface VimeoVideoItem {
   stats: {
     plays: number;
   };
-}
-
-export interface KickVideoItem {
-  id: string;
-  title: string;
-  description?: string;
-  thumbnail?: string;
-  url: string;
-  published_at: string;
-  duration?: string;
-  view_count?: number;
 }
 
 // Extract video ID from YouTube URL
@@ -382,30 +371,6 @@ export async function fetchVimeoVideos(
   }
 }
 
-// Fetch Kick videos
-// Note: Kick doesn't have a public API yet, so this is a placeholder
-// that can be extended when Kick releases their API
-export async function fetchKickVideos(
-  channelName: string,
-  limit: number = 10
-): Promise<Video[]> {
-  try {
-    // Kick doesn't have a public API yet
-    // This is a placeholder for future implementation
-    // For now, we'll return an empty array
-    console.warn('Kick API is not yet available. This is a placeholder for future implementation.');
-    
-    // TODO: Implement when Kick releases their public API
-    // Potential endpoint: https://kick.com/api/v1/channels/{channelName}/videos
-    
-    return [];
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Error fetching Kick videos:', errorMessage);
-    return [];
-  }
-}
-
 // Main function to fetch all videos
 export async function fetchAllVideos(limit: number = 20): Promise<Video[]> {
   const allVideos: Video[] = [];
@@ -470,18 +435,6 @@ export async function fetchAllVideos(limit: number = 20): Promise<Video[]> {
     } else {
       console.log('Vimeo not configured, skipping Vimeo videos');
     }
-  }
-
-  // Fetch Kick videos
-  const kickChannelName = process.env.KICK_CHANNEL_NAME;
-  
-  if (kickChannelName) {
-    console.log(`Fetching Kick videos for channel: ${kickChannelName}`);
-    const kickVideos = await fetchKickVideos(kickChannelName, limit);
-    console.log(`Fetched ${kickVideos.length} Kick videos`);
-    allVideos.push(...kickVideos);
-  } else {
-    console.log('KICK_CHANNEL_NAME not configured, skipping Kick videos');
   }
 
   // Sort by published date (newest first)

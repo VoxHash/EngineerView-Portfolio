@@ -20,8 +20,6 @@ const getPlatformIcon = (platform: Video['platform']) => {
       return <Youtube className="h-5 w-5" />;
     case 'twitch':
       return <Twitch className="h-5 w-5" />;
-    case 'kick':
-      return <VideoIcon className="h-5 w-5" />;
     case 'vimeo':
       return <VideoIcon className="h-5 w-5" />;
     default:
@@ -35,8 +33,8 @@ const getPlatformColor = (platform: Video['platform']) => {
       return 'bg-red-500';
     case 'twitch':
       return 'bg-purple-500';
-    case 'kick':
-      return 'bg-green-500';
+    case 'vimeo':
+      return 'bg-blue-500';
     default:
       return 'bg-gray-500';
   }
@@ -48,8 +46,6 @@ const getPlatformName = (platform: Video['platform']) => {
       return 'YouTube';
     case 'twitch':
       return 'Twitch';
-    case 'kick':
-      return 'Kick';
     case 'vimeo':
       return 'Vimeo';
     default:
