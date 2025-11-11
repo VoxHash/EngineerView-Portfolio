@@ -14,18 +14,33 @@ export default function GitHubActivity({ limit = 10 }: { limit?: number }) {
     const loadActivity = async () => {
       try {
         setIsLoading(true);
-        const data = await fetch(`/api/github/activity?limit=${limit}`);
-        if (!data.ok) {
-          throw new Error('Failed to fetch GitHub activity');
+        setError(null);
+        const response = await fetch(`/api/github/activity?limit=${limit}`);
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || `HTTP ${response.status}: Failed to fetch GitHub activity`);
         }
-        const result = await data.json();
+        
+        const result = await response.json();
+        
         if (result.success) {
-          setActivity(result.data.activity || []);
+          const activities = result.data?.activity || [];
+          if (activities.length === 0) {
+            console.log('No GitHub activity returned from API');
+          } else {
+            console.log(`Loaded ${activities.length} GitHub activities`);
+          }
+          setActivity(activities);
         } else {
-          setError(result.message || 'Failed to load activity');
+          const errorMessage = result.message || 'Failed to load activity';
+          console.error('API returned error:', errorMessage);
+          setError(errorMessage);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load activity');
+        const errorMessage = err instanceof Error ? err.message : 'Failed to load activity';
+        console.error('Error loading GitHub activity:', err);
+        setError(errorMessage);
       } finally {
         setIsLoading(false);
       }

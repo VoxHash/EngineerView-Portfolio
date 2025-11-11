@@ -74,7 +74,18 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const activity = await fetchGitHubActivity(SITE.githubUser, limit);
+    const githubUser = SITE.githubUser;
+    
+    if (!githubUser || githubUser === 'VoxHash') {
+      console.warn('GitHub username not configured. Using default or missing GITHUB_USERNAME env variable.');
+    }
+    
+    console.log(`Fetching GitHub activity for user: ${githubUser}, limit: ${limit}`);
+    
+    const activity = await fetchGitHubActivity(githubUser, limit);
+    
+    console.log(`Fetched ${activity.length} activities for ${githubUser}`);
+    
     const response = createSuccessResponse({
       activity,
       count: activity.length,
@@ -89,6 +100,13 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error fetching GitHub activity:', error);
+    if (error instanceof Error) {
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        githubUser: SITE.githubUser,
+      });
+    }
     const errorResponse = handleError(error);
     return NextResponse.json(errorResponse, { 
       status: errorResponse.statusCode,

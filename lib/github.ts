@@ -105,9 +105,20 @@ export interface GitHubActivity {
  */
 export async function fetchGitHubActivity(user: string, limit = 10): Promise<GitHubActivity[]> {
   try {
+    if (!user) {
+      console.error('GitHub username is required for fetching activity');
+      return [];
+    }
+    
     const events: any[] = await gh(`/users/${user}/events/public?per_page=${limit}`);
     
-    if (!Array.isArray(events) || events.length === 0) {
+    if (!Array.isArray(events)) {
+      console.error('GitHub API returned invalid response:', events);
+      return [];
+    }
+    
+    if (events.length === 0) {
+      console.log(`No public events found for user: ${user}`);
       return [];
     }
     
@@ -185,6 +196,11 @@ export async function fetchGitHubActivity(user: string, limit = 10): Promise<Git
       });
   } catch (error) {
     console.error('Error fetching GitHub activity:', error);
+    if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    }
+    // Return empty array to prevent breaking the UI
     return [];
   }
 }
