@@ -68,7 +68,7 @@ X_BEARER_TOKEN=your-x-bearer-token
 | Variable | Required | Type | Default | Description |
 |----------|----------|------|---------|-------------|
 | `GITHUB_USERNAME` | Yes | string | - | Your GitHub username |
-| `GITHUB_TOKEN` | No | string | - | GitHub personal access token |
+| `GITHUB_TOKEN` | No | string | - | GitHub personal access token (see [How to Get GitHub Token](#how-to-get-github-token)) |
 | `CONTACT_EMAIL` | Yes | string | - | Your contact email |
 | `SITE_URL` | Yes | string | `http://localhost:3000` | Your site URL |
 | `SOCIAL_HANDLE` | No | string | - | Your social media handle |

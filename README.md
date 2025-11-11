@@ -113,7 +113,7 @@ npm run type-check
 | Variable | Description | Required | Default |
 |----------|-------------|----------|---------|
 | `GITHUB_USERNAME` | Your GitHub username | No | `voxhash` |
-| `GITHUB_TOKEN` | GitHub personal access token | No | - |
+| `GITHUB_TOKEN` | GitHub personal access token | No | See [docs/configuration.md](docs/configuration.md#how-to-get-github-token) |
 | `CONTACT_EMAIL` | Your contact email | Yes | `contact@voxhash.dev` |
 | `SITE_URL` | Your site URL | Yes | `https://voxhash.dev` |
 | `NEXT_PUBLIC_GA_ID` | Google Analytics 4 Measurement ID | No | - |
