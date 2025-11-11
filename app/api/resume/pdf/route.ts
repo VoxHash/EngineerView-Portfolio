@@ -343,13 +343,21 @@ export async function GET(request: NextRequest) {
       });
     } catch (error) {
       console.error('Failed to launch Puppeteer:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       return NextResponse.json(
         {
           error: 'PDF generation service is currently unavailable',
-          message: 'Chrome/Chromium is not available in this environment. This is expected in some CI/CD environments.',
-          details: error instanceof Error ? error.message : 'Unknown error'
+          message: 'Chrome/Chromium is not available in this environment. This may be due to serverless function limitations. Please use the static PDF file instead.',
+          details: errorMessage,
+          suggestion: 'Try using the "Download PDF" button to get the pre-generated static PDF file.'
         },
-        { status: 503 }
+        { 
+          status: 503,
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache'
+          }
+        }
       );
     }
     
@@ -376,6 +384,16 @@ export async function GET(request: NextRequest) {
           'Cache-Control': 'no-cache',
         },
       });
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      return NextResponse.json(
+        {
+          error: 'PDF generation failed',
+          message: 'Failed to generate PDF. This may be due to server limitations.',
+          details: error instanceof Error ? error.message : 'Unknown error'
+        },
+        { status: 503 }
+      );
     } finally {
       // Always close browser, even if PDF generation fails
       if (page) {

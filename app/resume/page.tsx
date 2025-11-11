@@ -53,8 +53,33 @@ export default function ResumePage() {
       
       // Generate new PDF from API with latest data
       const response = await fetch('/api/resume/pdf');
+      
       if (!response.ok) {
-        throw new Error('Failed to generate PDF');
+        // Try to parse error message from response
+        let errorMessage = 'Failed to generate PDF';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch {
+          // If response is not JSON, use status text
+          errorMessage = response.statusText || errorMessage;
+        }
+        
+        // Show user-friendly error message
+        const fullMessage = `PDF generation failed: ${errorMessage}\n\nThis may be due to serverless function limitations.\n\nPlease use the "Download PDF" button to get the pre-generated static PDF file.`;
+        alert(fullMessage);
+        setPdfError(true);
+        return;
+      }
+      
+      // Check if response is actually a PDF
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/pdf')) {
+        // Response might be an error JSON
+        const errorData = await response.json();
+        alert(`PDF generation failed: ${errorData.message || errorData.error || 'Unknown error'}`);
+        setPdfError(true);
+        return;
       }
       
       const blob = await response.blob();
@@ -88,6 +113,7 @@ export default function ResumePage() {
       // It will be cleaned up when the page is unloaded or when a new PDF is generated
     } catch (error) {
       console.error('Error generating new PDF:', error);
+      alert(`PDF generation failed: ${error instanceof Error ? error.message : 'Unknown error'}\n\nPlease try downloading the static PDF instead.`);
       setPdfError(true);
     }
   };
