@@ -118,13 +118,20 @@ export function handleError(error: unknown): APIError {
     if (error.message.includes('rate limit') || error.message.includes('429')) {
       return createErrorResponse(ErrorCode.RATE_LIMITED, 'Rate limit exceeded');
     }
+    
+    // For Error instances that don't match patterns, return the error message
+    return createErrorResponse(
+      ErrorCode.SERVER_ERROR,
+      error.message,
+      { originalError: error.message }
+    );
   }
   
-  // Default to server error
+  // Default to server error for unknown error types
   return createErrorResponse(
     ErrorCode.SERVER_ERROR,
     'An unexpected error occurred',
-    { originalError: error instanceof Error ? error.message : String(error) }
+    { originalError: String(error) }
   );
 }
 
