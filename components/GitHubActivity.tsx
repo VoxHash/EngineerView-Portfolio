@@ -122,9 +122,9 @@ export default function GitHubActivity({ limit = 10 }: { limit?: number }) {
 
   return (
     <div className="space-y-4">
-      {activity.map((item) => (
+      {activity.map((item, index) => (
         <article
-          key={item.id}
+          key={`${item.id}-${index}`}
           className="card p-4 hover-glow transition-all duration-200"
         >
           <div className="flex items-start gap-4">

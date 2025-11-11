@@ -107,51 +107,82 @@ export async function fetchGitHubActivity(user: string, limit = 10): Promise<Git
   try {
     const events: any[] = await gh(`/users/${user}/events/public?per_page=${limit}`);
     
+    if (!Array.isArray(events) || events.length === 0) {
+      return [];
+    }
+    
     // Filter out duplicate events and ensure we have valid events
     const seenIds = new Set<string>();
     const uniqueEvents = events.filter((event) => {
-      if (!event.id || !event.type || !event.repo || seenIds.has(event.id)) {
+      if (!event || !event.id || !event.type || !event.repo || seenIds.has(event.id)) {
         return false;
       }
       seenIds.add(event.id);
       return true;
     });
     
-    return uniqueEvents.map((event) => {
-      // For PushEvent, use payload.size for commit count (more reliable than commits.length)
-      const commitCount = event.type === 'PushEvent' 
-        ? (event.payload?.size || event.payload?.commits?.length || 0)
-        : (event.payload?.commits?.length || 0);
-      
-      return {
-        id: event.id,
-        type: event.type,
-        repo: {
-          name: event.repo.name,
-          url: `https://github.com/${event.repo.name}`,
-        },
-        action: event.payload?.action,
-        createdAt: event.created_at,
-        payload: {
-          commitCount, // Store the actual commit count
-          commits: event.payload?.commits?.map((commit: any) => ({
-            message: commit.message,
-            sha: commit.sha,
-            url: `https://github.com/${event.repo.name}/commit/${commit.sha}`,
-          })) || [],
-          pull_request: event.payload?.pull_request ? {
-            title: event.payload.pull_request.title,
-            url: event.payload.pull_request.html_url,
-            state: event.payload.pull_request.state,
-          } : undefined,
-          issue: event.payload?.issue ? {
-            title: event.payload.issue.title,
-            url: event.payload.issue.html_url,
-            state: event.payload.issue.state,
-          } : undefined,
-        },
-      };
-    });
+    return uniqueEvents
+      .map((event) => {
+        // For PushEvent, GitHub API provides:
+        // - payload.size: total number of commits in the push
+        // - payload.commits: array of commit objects (may be truncated to 20)
+        // We should use payload.size if available, as it's the accurate count
+        let commitCount = 0;
+        
+        if (event.type === 'PushEvent') {
+          // Check payload.size first (most reliable)
+          if (typeof event.payload?.size === 'number') {
+            commitCount = event.payload.size;
+          } 
+          // Fallback to commits array length
+          else if (Array.isArray(event.payload?.commits)) {
+            commitCount = event.payload.commits.length;
+          }
+        } else if (event.type === 'CreateEvent' || event.type === 'DeleteEvent') {
+          // These events don't have commits
+          commitCount = 0;
+        } else if (Array.isArray(event.payload?.commits)) {
+          commitCount = event.payload.commits.length;
+        }
+        
+        return {
+          id: event.id,
+          type: event.type,
+          repo: {
+            name: event.repo.name,
+            url: `https://github.com/${event.repo.name}`,
+          },
+          action: event.payload?.action,
+          createdAt: event.created_at,
+          payload: {
+            commitCount, // Store the actual commit count
+            commits: Array.isArray(event.payload?.commits) 
+              ? event.payload.commits.map((commit: any) => ({
+                  message: commit.message || 'No message',
+                  sha: commit.sha || '',
+                  url: `https://github.com/${event.repo.name}/commit/${commit.sha || ''}`,
+                }))
+              : [],
+            pull_request: event.payload?.pull_request ? {
+              title: event.payload.pull_request.title,
+              url: event.payload.pull_request.html_url,
+              state: event.payload.pull_request.state,
+            } : undefined,
+            issue: event.payload?.issue ? {
+              title: event.payload.issue.title,
+              url: event.payload.issue.html_url,
+              state: event.payload.issue.state,
+            } : undefined,
+          },
+        };
+      })
+      // Filter out PushEvents with 0 commits (empty pushes, force pushes, etc.)
+      .filter((activity) => {
+        if (activity.type === 'PushEvent' && (activity.payload?.commitCount || 0) === 0) {
+          return false;
+        }
+        return true;
+      });
   } catch (error) {
     console.error('Error fetching GitHub activity:', error);
     return [];
