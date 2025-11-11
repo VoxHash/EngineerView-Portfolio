@@ -52,6 +52,7 @@ YOUTUBE_CHANNEL_ID=your-youtube-channel-id
 YOUTUBE_API_KEY=your-youtube-api-key
 TWITCH_CHANNEL_NAME=your-twitch-channel-name
 TWITCH_CLIENT_ID=your-twitch-client-id
+TWITCH_CLIENT_SECRET=your-twitch-client-secret
 VIMEO_USER_ID=your-vimeo-user-id
 VIMEO_ACCESS_TOKEN=your-vimeo-access-token
 
@@ -84,7 +85,8 @@ X_BEARER_TOKEN=your-x-bearer-token
 | `YOUTUBE_API_KEY` | No | string | - | YouTube Data API v3 key (optional, for enhanced data - see [How to Get YouTube API Key](#how-to-get-youtube-api-key)) |
 | `TWITCH_CHANNEL_NAME` | No | string | - | Twitch channel username (see [How to Get Twitch Credentials](#how-to-get-twitch-credentials)) |
 | `TWITCH_CLIENT_ID` | No | string | - | Twitch API client ID (see [How to Get Twitch Credentials](#how-to-get-twitch-credentials)) |
-| `VIMEO_USER_ID` | No | string | - | Vimeo user ID (see [How to Get Vimeo Credentials](#how-to-get-vimeo-credentials)) |
+| `TWITCH_CLIENT_SECRET` | No | string | - | Twitch API client secret (optional but recommended for OAuth - see [How to Get Twitch Credentials](#how-to-get-twitch-credentials)) |
+| `VIMEO_USER_ID` | No | string | - | Vimeo user ID (numeric, not username - see [How to Get Vimeo Credentials](#how-to-get-vimeo-credentials)) |
 | `VIMEO_ACCESS_TOKEN` | No | string | - | Vimeo API access token (see [How to Get Vimeo Credentials](#how-to-get-vimeo-credentials)) |
 | `TWITTER_USERNAME` | No | string | - | Twitter/X username (for feed page) |
 | `X_USERNAME` | No | string | - | Alternative to TWITTER_USERNAME |
@@ -263,13 +265,14 @@ The `VIMEO_USER_ID` and `VIMEO_ACCESS_TOKEN` are required to fetch videos from V
 - Video URLs and embed information
 
 **Troubleshooting:**
-- **401 Error**: Access token may be invalid or expired. Generate a new one.
-- **404 Error**: User ID may be incorrect. Double-check your user ID.
-- **403 Error**: Access token may not have the required scopes. Regenerate with `public` scope.
+- **401 Error**: Access token may be invalid or expired. Generate a new one from https://developer.vimeo.com/apps
+- **404 Error**: User ID may be incorrect. **Important**: Vimeo User IDs are numeric (e.g., `12345678`), not usernames. Get your numeric User ID from https://vimeo.com/settings/profile
+- **403 Error**: Access token may not have the required scopes. Regenerate with `public` scope
+- **"User ID must be numeric" error**: You're using a username instead of a numeric User ID. Vimeo User IDs are numbers, not text usernames
 
 ### How to Get Twitch Credentials
 
-The `TWITCH_CHANNEL_NAME` and `TWITCH_CLIENT_ID` are required to fetch videos from Twitch. Note that Twitch's Helix API requires OAuth authentication for some endpoints, but basic video fetching may work with just a Client ID.
+The `TWITCH_CHANNEL_NAME` and `TWITCH_CLIENT_ID` are required to fetch videos from Twitch. `TWITCH_CLIENT_SECRET` is optional but recommended - Twitch's Helix API requires OAuth authentication for most endpoints, and providing the Client Secret enables OAuth App Access Token flow.
 
 **Steps to get Twitch Channel Name and Client ID:**
 
@@ -297,18 +300,28 @@ The `TWITCH_CHANNEL_NAME` and `TWITCH_CLIENT_ID` are required to fetch videos fr
    - Copy it immediately
    - **Note**: You can always view this later from the Twitch Developer Console
 
-5. **Add to Environment Variables**
+5. **Get Your Client Secret (Optional but Recommended)**
+   - After creating the application, you'll see a **Client Secret** field
+   - Click "New Secret" to generate one
+   - **Important**: Copy the Client Secret immediately - you won't be able to see it again!
+   - If you lose it, you'll need to generate a new one
+   - The Client Secret is required for OAuth authentication (recommended to avoid 401 errors)
+
+6. **Add to Environment Variables**
    ```bash
    # Add to your .env.local file
    TWITCH_CHANNEL_NAME=your-twitch-username
    TWITCH_CLIENT_ID=your_client_id_here
+   TWITCH_CLIENT_SECRET=your_client_secret_here  # Optional but recommended
    ```
 
 **Important Notes:**
 - **Client ID Security**: While not as sensitive as a secret, don't commit it to version control
-- **OAuth Requirements**: Twitch Helix API may require OAuth for some endpoints. The current implementation uses Client ID only, which may result in 401 errors
-- **Rate Limits**: Twitch API has rate limits (varies by authentication method)
-- **Production**: Add both variables as environment variables in your deployment settings (Vercel)
+- **Client Secret Security**: Never commit the Client Secret to version control - it's highly sensitive
+- **OAuth Requirements**: Twitch Helix API requires OAuth authentication for most endpoints. Providing `TWITCH_CLIENT_SECRET` enables automatic OAuth App Access Token flow
+- **Without Client Secret**: The implementation will try Client ID only, which will likely result in 401 errors
+- **Rate Limits**: Twitch API has rate limits (varies by authentication method - OAuth provides better rate limits)
+- **Production**: Add all three variables as environment variables in your deployment settings (Vercel)
 
 **What the credentials enable:**
 - Fetch your public videos/clips from Twitch
@@ -317,15 +330,15 @@ The `TWITCH_CHANNEL_NAME` and `TWITCH_CLIENT_ID` are required to fetch videos fr
 - Video URLs
 
 **Troubleshooting:**
-- **401 Error**: Twitch Helix API may require OAuth authentication, not just Client ID. This is a known limitation - Twitch's API requires OAuth for most endpoints
-- **404 Error**: Channel name may be incorrect. Double-check your exact Twitch username
-- **403 Error**: Client ID may be invalid or the API endpoint may require different authentication
+- **401 Error**: Twitch Helix API requires OAuth authentication. Add `TWITCH_CLIENT_SECRET` to enable OAuth App Access Token flow. Without it, you'll get 401 errors.
+- **404 Error**: Channel name may be incorrect. Double-check your exact Twitch username (case-sensitive)
+- **403 Error**: Client ID or Client Secret may be invalid. Verify both in the Twitch Developer Console
 
-**Note on Twitch API Limitations:**
-- Twitch's Helix API requires OAuth 2.0 authentication for most video-related endpoints
-- Using only a Client ID may result in 401 errors
-- For full functionality, you may need to implement OAuth flow (beyond the scope of this basic setup)
-- The current implementation will gracefully handle errors and return empty arrays if authentication fails
+**OAuth App Access Token Flow:**
+- When `TWITCH_CLIENT_SECRET` is provided, the implementation automatically obtains an OAuth App Access Token
+- This token is used for all Twitch API requests, avoiding 401 errors
+- The token is cached and refreshed as needed
+- This is the recommended approach for server-side applications
 
 ## ⚙️ Site Configuration
 

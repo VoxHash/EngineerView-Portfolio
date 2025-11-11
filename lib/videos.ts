@@ -194,6 +194,8 @@ export async function fetchYouTubeVideosAPI(
       const errorData = await channelResponse.json().catch(() => ({}));
       if (channelResponse.status === 403) {
         throw new Error(`YouTube API 403: ${errorData.error?.message || 'API key may be invalid, restricted, or channel ID incorrect. Channel ID should start with UC (e.g., UCxxxxxxxxxxxxx), not @handle'}`);
+      } else if (channelResponse.status === 404) {
+        throw new Error(`YouTube API 404: Channel not found. Channel ID "${actualChannelId}" may be incorrect. Verify your channel ID at https://www.youtube.com/account_advanced`);
       }
       throw new Error(`Failed to fetch YouTube channel: ${channelResponse.status}`);
     }
@@ -258,6 +260,8 @@ export async function fetchYouTubeVideosAPI(
       console.warn('YouTube API 403: Check API key validity, restrictions, or channel ID. Channel ID should start with UC (e.g., UCxxxxxxxxxxxxx), not @handle');
     } else if (errorMessage.includes('401')) {
       console.warn('YouTube API 401: API key may be invalid or expired');
+    } else if (errorMessage.includes('404')) {
+      console.warn('YouTube API 404: Channel not found. Verify your channel ID at https://www.youtube.com/account_advanced');
     } else if (errorMessage.includes('Uploads playlist not found')) {
       console.warn('YouTube: Channel may have no videos, or channel ID format is incorrect. Use channel ID (starts with UC), not @handle');
     } else if (errorMessage.includes('channel not found')) {
@@ -269,20 +273,68 @@ export async function fetchYouTubeVideosAPI(
   }
 }
 
-// Fetch Twitch videos (requires Client ID)
+// Get Twitch OAuth App Access Token (requires Client ID and Client Secret)
+async function getTwitchAppAccessToken(clientId: string, clientSecret: string): Promise<string> {
+  try {
+    const response = await fetch('https://id.twitch.tv/oauth2/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: 'client_credentials',
+      }),
+      ...getFetchCacheOptions('DYNAMIC')
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to get Twitch access token: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.access_token;
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Error getting Twitch access token:', errorMessage);
+    throw error;
+  }
+}
+
+// Fetch Twitch videos (requires Client ID, optionally Client Secret for OAuth)
 export async function fetchTwitchVideos(
   channelName: string,
   clientId: string,
+  clientSecret?: string,
   limit: number = 10
 ): Promise<Video[]> {
   try {
+    let accessToken: string | undefined;
+    
+    // If Client Secret is provided, get OAuth App Access Token
+    if (clientSecret) {
+      try {
+        accessToken = await getTwitchAppAccessToken(clientId, clientSecret);
+      } catch (error) {
+        console.warn('Failed to get Twitch OAuth token, falling back to Client ID only');
+      }
+    }
+
+    // Prepare headers
+    const headers: Record<string, string> = {
+      'Client-ID': clientId,
+    };
+    
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+
     // First, get user ID from username
     const userResponse = await fetch(
       `https://api.twitch.tv/helix/users?login=${channelName}`,
       {
-        headers: {
-          'Client-ID': clientId,
-        },
+        headers,
         ...getFetchCacheOptions('DYNAMIC')
       }
     );
@@ -302,9 +354,7 @@ export async function fetchTwitchVideos(
     const videosResponse = await fetch(
       `https://api.twitch.tv/helix/videos?user_id=${userId}&first=${limit}&sort=time`,
       {
-        headers: {
-          'Client-ID': clientId,
-        },
+        headers,
         ...getFetchCacheOptions('DYNAMIC')
       }
     );
@@ -314,6 +364,11 @@ export async function fetchTwitchVideos(
     }
 
     const videosData = await videosResponse.json();
+
+    // Handle case where user exists but has no videos (empty array is valid)
+    if (!videosData.data || !Array.isArray(videosData.data) || videosData.data.length === 0) {
+      return [];
+    }
 
     return videosData.data.map((item: TwitchVideoItem) => ({
       id: item.id,
@@ -333,9 +388,11 @@ export async function fetchTwitchVideos(
     
     // Log more details for debugging
     if (errorMessage.includes('401')) {
-      console.warn('Twitch API 401: Client ID may be invalid. Twitch API may require OAuth authentication.');
+      console.warn('Twitch API 401: Twitch Helix API requires OAuth authentication. Add TWITCH_CLIENT_SECRET to your environment variables to enable OAuth App Access Token flow.');
     } else if (errorMessage.includes('404')) {
-      console.warn('Twitch API 404: Channel name may be incorrect or user not found');
+      console.warn('Twitch API 404: Channel name may be incorrect or user not found. Verify your exact Twitch username.');
+    } else if (errorMessage.includes('403')) {
+      console.warn('Twitch API 403: Client ID may be invalid or the API endpoint may require different authentication.');
     }
     
     // Return empty array to gracefully handle errors
@@ -350,6 +407,11 @@ export async function fetchVimeoVideos(
   limit: number = 10
 ): Promise<Video[]> {
   try {
+    // Validate that userId is numeric (Vimeo user IDs are numeric, not usernames)
+    if (isNaN(Number(userId))) {
+      throw new Error(`Vimeo User ID must be numeric. "${userId}" appears to be a username. Get your numeric User ID from your Vimeo profile settings.`);
+    }
+
     const response = await fetch(
       `https://api.vimeo.com/users/${userId}/videos?per_page=${limit}&sort=date&direction=desc`,
       {
@@ -396,10 +458,14 @@ export async function fetchVimeoVideos(
     console.error('Error fetching Vimeo videos:', errorMessage);
     
     // Log more details for debugging
-    if (errorMessage.includes('401')) {
-      console.warn('Vimeo API 401: Access token may be invalid or expired');
+    if (errorMessage.includes('must be numeric')) {
+      console.warn('Vimeo: User ID must be numeric, not a username. Get your numeric User ID from https://vimeo.com/settings/profile');
+    } else if (errorMessage.includes('401')) {
+      console.warn('Vimeo API 401: Access token may be invalid or expired. Regenerate it from https://developer.vimeo.com/apps');
     } else if (errorMessage.includes('404')) {
-      console.warn('Vimeo API 404: User ID may be incorrect or user not found');
+      console.warn('Vimeo API 404: User ID may be incorrect or user not found. Vimeo User IDs are numeric, not usernames.');
+    } else if (errorMessage.includes('403')) {
+      console.warn('Vimeo API 403: Access token may lack required permissions. Ensure it has "public" scope.');
     }
     
     // Return empty array to gracefully handle errors
@@ -438,10 +504,11 @@ export async function fetchAllVideos(limit: number = 20): Promise<Video[]> {
   // Fetch Twitch videos
   const twitchChannelName = process.env.TWITCH_CHANNEL_NAME;
   const twitchClientId = process.env.TWITCH_CLIENT_ID;
+  const twitchClientSecret = process.env.TWITCH_CLIENT_SECRET;
   
   if (twitchChannelName && twitchClientId) {
     console.log(`Fetching Twitch videos for channel: ${twitchChannelName}`);
-    const twitchVideos = await fetchTwitchVideos(twitchChannelName, twitchClientId, limit);
+    const twitchVideos = await fetchTwitchVideos(twitchChannelName, twitchClientId, twitchClientSecret, limit);
     console.log(`Fetched ${twitchVideos.length} Twitch videos`);
     allVideos.push(...twitchVideos);
   } else {
@@ -452,6 +519,10 @@ export async function fetchAllVideos(limit: number = 20): Promise<Video[]> {
     } else {
       console.log('Twitch not configured, skipping Twitch videos');
     }
+  }
+  
+  if (twitchClientId && !twitchClientSecret) {
+    console.warn('TWITCH_CLIENT_ID is set but TWITCH_CLIENT_SECRET is missing. Twitch API may require OAuth (401 errors expected).');
   }
 
   // Fetch Vimeo videos
