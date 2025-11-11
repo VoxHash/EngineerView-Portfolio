@@ -56,57 +56,68 @@ const htmlContent = `
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: #1a1a1a;
             background: #fff;
+            font-size: 11pt;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
-            padding: 40px;
+            padding: 35px 40px;
         }
         
         .header {
-            text-align: center;
-            margin-bottom: 40px;
-            border-bottom: 3px solid #7C3AED;
-            padding-bottom: 20px;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #000;
         }
         
         .name {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #7C3AED;
-            margin-bottom: 10px;
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
         
         .title {
-            font-size: 1.2em;
-            color: #666;
-            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #4a4a4a;
+            margin-bottom: 18px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
         }
         
         .contact {
             display: flex;
-            justify-content: center;
-            gap: 30px;
+            gap: 25px;
             flex-wrap: wrap;
-            font-size: 0.9em;
+            font-size: 0.85em;
+            color: #666;
+        }
+        
+        .contact span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         
         .section {
-            margin-bottom: 30px;
+            margin-bottom: 28px;
         }
         
         .section-title {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #7C3AED;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #E5E7EB;
-            padding-bottom: 5px;
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
         }
         
         .project {
@@ -140,59 +151,86 @@ const htmlContent = `
         }
         
         .skill-category {
-            background: #F3F4F6;
-            padding: 15px;
-            border-radius: 8px;
+            background: transparent;
+            padding: 0;
+            border: none;
         }
         
         .skill-category h4 {
-            color: #7C3AED;
-            margin-bottom: 10px;
-            font-size: 1.1em;
+            color: #000;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .skill-list {
             list-style: none;
             font-size: 0.9em;
+            margin: 0;
+            padding: 0;
         }
         
         .skill-list li {
-            margin-bottom: 5px;
-            padding-left: 15px;
-            position: relative;
+            margin-bottom: 6px;
+            padding-left: 0;
+            color: #4a4a4a;
         }
         
         .skill-list li:before {
-            content: "•";
-            color: #7C3AED;
-            position: absolute;
-            left: 0;
+            content: "▸";
+            color: #000;
+            margin-right: 8px;
+            font-size: 0.7em;
         }
         
         .experience {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            page-break-inside: avoid;
+        }
+        
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
         }
         
         .exp-title {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
+            font-weight: 700;
+            color: #000;
+            font-size: 1.05em;
         }
         
         .exp-company {
-            color: #7C3AED;
-            font-weight: 500;
+            color: #000;
+            font-weight: 600;
+            font-size: 0.95em;
         }
         
         .exp-dates {
             color: #666;
-            font-size: 0.9em;
-            margin-bottom: 10px;
+            font-size: 0.85em;
+            font-weight: 500;
+            white-space: nowrap;
         }
         
         .exp-desc {
-            color: #555;
+            color: #4a4a4a;
             font-size: 0.9em;
+            line-height: 1.6;
+            margin-top: 6px;
+        }
+        
+        .exp-desc ul {
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+        
+        .exp-desc li {
+            margin-bottom: 4px;
+            color: #4a4a4a;
         }
         
         .stats {
@@ -222,16 +260,24 @@ const htmlContent = `
         
         .footer {
             text-align: center;
-            margin-top: 40px;
+            margin-top: 35px;
             padding-top: 20px;
-            border-top: 1px solid #E5E7EB;
-            color: #666;
-            font-size: 0.9em;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.75em;
         }
         
         @media print {
-            body { -webkit-print-color-adjust: exact; }
-            .container { padding: 20px; }
+            body { 
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .container { 
+                padding: 20px 30px;
+            }
+            .section {
+                page-break-inside: avoid;
+            }
         }
     </style>
 </head>
@@ -239,53 +285,12 @@ const htmlContent = `
     <div class="container">
         <div class="header">
             <div class="name">${SITE.name}</div>
-            <div class="title">Senior Software Engineer • AI • Systems • Creator</div>
+            <div class="title">Senior Software Engineer</div>
             <div class="contact">
-                <span>📧 ${SITE.email}</span>
-                <span>🌐 ${SITE.url}</span>
-                <span>💼 GitHub: ${SITE.githubUser}</span>
+                <span>${SITE.email}</span>
+                <span>${SITE.url}</span>
+                <span>github.com/${SITE.githubUser}</span>
             </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">Professional Summary</div>
-            <p>${SITE.description}</p>
-        </div>
-
-        <div class="section">
-            <div class="section-title">GitHub Statistics</div>
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-number">${pinnedRepos.reduce((sum, repo) => sum + repo.stargazers_count, 0)}</div>
-                    <div class="stat-label">Total Stars</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">${pinnedRepos.reduce((sum, repo) => sum + repo.forks_count, 0)}</div>
-                    <div class="stat-label">Total Forks</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">${pinnedRepos.length}</div>
-                    <div class="stat-label">Featured Projects</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">${recentRepos.length}</div>
-                    <div class="stat-label">Recent Updates</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">Featured Projects</div>
-            ${pinnedRepos.map(repo => `
-                <div class="project">
-                    <div class="project-title">${repo.name}</div>
-                    <div class="project-desc">${repo.description || 'No description available'}</div>
-                    <div class="project-meta">
-                        ⭐ ${repo.stargazers_count} stars • 🍴 ${repo.forks_count} forks • 
-                        ${repo.language || 'Other'} • Updated ${new Date(repo.pushed_at).toLocaleDateString()}
-                    </div>
-                </div>
-            `).join('')}
         </div>
 
         <div class="section">
@@ -333,56 +338,63 @@ const htmlContent = `
         <div class="section">
             <div class="section-title">Professional Experience</div>
             <div class="experience">
-                <div class="exp-title">CEO</div>
-                <div class="exp-company">VoxHash Technologies • Remote</div>
-                <div class="exp-dates">2018 - Present</div>
+                <div class="exp-header">
+                    <div>
+                        <div class="exp-title">CEO</div>
+                        <div class="exp-company">VoxHash Technologies</div>
+                    </div>
+                    <div class="exp-dates">2018 - Present</div>
+                </div>
                 <div class="exp-desc">
-                    Building scalable web applications and AI-powered products. Leading technical architecture decisions and mentoring junior developers. 
-                    Technologies: Next.js, TypeScript, Python, AWS, AI/ML.
+                    Leading technical strategy and architecture for scalable web applications and AI-powered products. 
+                    Designing end-to-end systems from infrastructure to user experience. Mentoring engineering teams and 
+                    establishing technical best practices. Driving innovation in AI integration and modern web technologies.
                 </div>
             </div>
             <div class="experience">
-                <div class="exp-title">Co-Founder & Game Developer</div>
-                <div class="exp-company">Glytherra Studio • Remote</div>
-                <div class="exp-dates">2018 - Present</div>
+                <div class="exp-header">
+                    <div>
+                        <div class="exp-title">Co-Founder & CTO</div>
+                        <div class="exp-company">LicenseChain</div>
+                    </div>
+                    <div class="exp-dates">2024 - Present</div>
+                </div>
                 <div class="exp-desc">
-                    Led development of game engines and interactive experiences. Architected scalable backend systems for multiplayer games and real-time synchronization. 
-                    Technologies: Game Development, Unity, C#, Multiplayer, Backend Systems, Real-time.
+                    Architected and developed blockchain-based licensing platform with smart contract infrastructure. 
+                    Built decentralized applications for intellectual property management. Led technical team in Web3 
+                    development, implementing secure smart contracts and scalable blockchain solutions.
                 </div>
             </div>
             <div class="experience">
-                <div class="exp-title">Senior Software Consultant</div>
-                <div class="exp-company">Olyren Consulting • Remote</div>
-                <div class="exp-dates">2022 - Present</div>
+                <div class="exp-header">
+                    <div>
+                        <div class="exp-title">Senior Software Consultant</div>
+                        <div class="exp-company">Olyren Consulting</div>
+                    </div>
+                    <div class="exp-dates">2022 - Present</div>
+                </div>
                 <div class="exp-desc">
-                    Provided technical consulting services to enterprise clients. Designed and implemented custom software solutions, optimized system performance, and led technical teams. 
-                    Focus: Consulting, Enterprise Solutions, System Architecture, Performance Optimization, Team Leadership.
+                    Delivered technical consulting to enterprise clients, designing and implementing custom software solutions. 
+                    Optimized system performance and scalability for high-traffic applications. Led cross-functional technical 
+                    teams and established architecture patterns for distributed systems.
                 </div>
             </div>
             <div class="experience">
-                <div class="exp-title">Co-Founder & CTO</div>
-                <div class="exp-company">LicenseChain • Remote</div>
-                <div class="exp-dates">2024 - Present</div>
+                <div class="exp-header">
+                    <div>
+                        <div class="exp-title">Co-Founder & Game Developer</div>
+                        <div class="exp-company">Glytherra Studio</div>
+                    </div>
+                    <div class="exp-dates">2018 - Present</div>
+                </div>
                 <div class="exp-desc">
-                    Developed blockchain-based licensing solutions and smart contract systems. Built decentralized applications for intellectual property management. 
-                    Technologies: Blockchain, Smart Contracts, Web3, Solidity, React, Node.js.
+                    Developed game engines and interactive experiences with focus on real-time multiplayer systems. 
+                    Architected scalable backend infrastructure for game services, implementing low-latency synchronization 
+                    and state management. Built tools and pipelines for game development workflows.
                 </div>
             </div>
         </div>
 
-        <div class="section">
-            <div class="section-title">Recent Activity</div>
-            ${recentRepos.map(repo => `
-                <div class="project">
-                    <div class="project-title">${repo.name}</div>
-                    <div class="project-desc">${repo.description || 'No description available'}</div>
-                    <div class="project-meta">
-                        ⭐ ${repo.stargazers_count} stars • ${repo.language || 'Other'} • 
-                        Updated ${new Date(repo.pushed_at).toLocaleDateString()}
-                    </div>
-                </div>
-            `).join('')}
-        </div>
 
         <div class="footer">
             <p>Generated on ${new Date().toLocaleDateString()} • Visit ${SITE.url} for more information</p>
