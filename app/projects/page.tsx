@@ -35,7 +35,8 @@ export default function ProjectsPage(){
       }
     };
     loadRepos();
-  }, [measureAsync, logReport]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Group repos by technology/language
   const groupedRepos = useMemo(() => {
