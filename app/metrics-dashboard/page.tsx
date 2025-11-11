@@ -5,6 +5,25 @@ import { CheckCircle2, XCircle, AlertTriangle, TrendingUp, Clock, Shield, Code, 
 import { metricsTracker, type MetricTarget } from "@/lib/metrics-tracker";
 import type { SuccessMetrics } from "@/lib/metrics-tracker";
 
+// Client-side date formatting component to avoid hydration mismatches
+function LastUpdated({ timestamp }: { timestamp: number }) {
+  const [formattedDate, setFormattedDate] = useState<string>('');
+
+  useEffect(() => {
+    // Only format on client side to avoid hydration mismatch
+    setFormattedDate(new Date(timestamp).toLocaleString());
+  }, [timestamp]);
+
+  if (!formattedDate) return null;
+
+  return (
+    <div className="mt-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
+      <Clock className="h-4 w-4 inline mr-1" />
+      Last updated: {formattedDate}
+    </div>
+  );
+}
+
 export default function MetricsDashboardPage() {
   const [metrics, setMetrics] = useState<SuccessMetrics | null>(null);
   const [targets, setTargets] = useState<MetricTarget[]>([]);
@@ -251,10 +270,7 @@ export default function MetricsDashboardPage() {
       </div>
 
       {/* Last Updated */}
-      <div className="mt-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
-        <Clock className="h-4 w-4 inline mr-1" />
-        Last updated: {new Date(metrics.timestamp).toLocaleString()}
-      </div>
+      <LastUpdated timestamp={metrics.timestamp} />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { Scale, FileText, AlertCircle, CheckCircle, Shield, Mail, Calendar } fro
 import { SITE } from "@/lib/site";
 import { generateMetadata as generateSEOMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
+import ClientDate from "@/components/ClientDate";
 
 export const metadata: Metadata = generateSEOMetadata({
   title: "Terms of Use",
@@ -27,7 +28,7 @@ export default function Terms() {
           By accessing and using this website, you agree to comply with and be bound by the following terms and conditions.
         </p>
         <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-2">
-          Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          Last updated: <ClientDate format="date" fallback="January 1, 2025" />
         </p>
       </div>
 

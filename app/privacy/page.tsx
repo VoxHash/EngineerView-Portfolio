@@ -2,6 +2,7 @@ import { Shield, Lock, Eye, FileText, Mail, Calendar } from "lucide-react";
 import { SITE } from "@/lib/site";
 import { generateMetadata as generateSEOMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
+import ClientDate from "@/components/ClientDate";
 
 export const metadata: Metadata = generateSEOMetadata({
   title: "Privacy Policy",
@@ -27,7 +28,7 @@ export default function Privacy() {
           Your privacy is important to us. This policy explains how we collect, use, and protect your information.
         </p>
         <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-2">
-          Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          Last updated: <ClientDate format="date" fallback="January 1, 2025" />
         </p>
       </div>
 

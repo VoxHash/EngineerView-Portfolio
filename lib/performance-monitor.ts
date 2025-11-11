@@ -2,6 +2,8 @@
  * Performance monitoring utilities for tracking and optimizing application performance
  */
 
+import { useMemo, useCallback } from 'react';
+
 export interface PerformanceMetric {
   name: string;
   value: number;
@@ -204,22 +206,39 @@ export const performanceMonitor = typeof window !== 'undefined'
  * React hook for performance monitoring
  */
 export function usePerformanceMonitor() {
-  if (typeof window === 'undefined') {
-    return {
-      measure: <T,>(name: string, fn: () => T) => fn(),
-      measureAsync: <T,>(name: string, fn: () => Promise<T>) => fn(),
-      getReport: () => ({ metrics: [], timestamp: Date.now(), url: '' }),
-      logReport: () => {},
-    };
-  }
+  const measure = useCallback(<T,>(name: string, fn: () => T) => {
+    if (typeof window === 'undefined' || !performanceMonitor) {
+      return fn();
+    }
+    return performanceMonitor.measureFunction(name, fn);
+  }, []);
 
-  return {
-    measure: <T,>(name: string, fn: () => T) => 
-      performanceMonitor?.measureFunction(name, fn) ?? fn(),
-    measureAsync: <T,>(name: string, fn: () => Promise<T>) => 
-      performanceMonitor?.measureAsyncFunction(name, fn) ?? fn(),
-    getReport: () => performanceMonitor?.getReport() ?? { metrics: [], timestamp: Date.now(), url: '' },
-    logReport: () => performanceMonitor?.logReport(),
-  };
+  const measureAsync = useCallback(<T,>(name: string, fn: () => Promise<T>) => {
+    if (typeof window === 'undefined' || !performanceMonitor) {
+      return fn();
+    }
+    return performanceMonitor.measureAsyncFunction(name, fn);
+  }, []);
+
+  const getReport = useCallback(() => {
+    if (typeof window === 'undefined' || !performanceMonitor) {
+      return { metrics: [], timestamp: Date.now(), url: '' };
+    }
+    return performanceMonitor.getReport();
+  }, []);
+
+  const logReport = useCallback(() => {
+    if (typeof window === 'undefined' || !performanceMonitor) {
+      return;
+    }
+    performanceMonitor.logReport();
+  }, []);
+
+  return useMemo(() => ({
+    measure,
+    measureAsync,
+    getReport,
+    logReport,
+  }), [measure, measureAsync, getReport, logReport]);
 }
 
