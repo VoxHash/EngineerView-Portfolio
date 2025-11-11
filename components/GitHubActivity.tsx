@@ -71,7 +71,9 @@ export default function GitHubActivity({ limit = 10 }: { limit?: number }) {
   const getActivityText = (activity: GitHubActivity) => {
     switch (activity.type) {
       case 'PushEvent':
-        return `Pushed ${activity.payload?.commits?.length || 0} commit${(activity.payload?.commits?.length || 0) !== 1 ? 's' : ''} to`;
+        // Use commitCount if available (more reliable), otherwise fall back to commits.length
+        const commitCount = activity.payload?.commitCount ?? activity.payload?.commits?.length ?? 0;
+        return `Pushed ${commitCount} commit${commitCount !== 1 ? 's' : ''} to`;
       case 'PullRequestEvent':
         return `${activity.action === 'opened' ? 'Opened' : activity.action === 'closed' ? 'Closed' : 'Updated'} pull request in`;
       case 'IssuesEvent':

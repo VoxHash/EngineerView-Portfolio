@@ -81,6 +81,7 @@ export interface GitHubActivity {
   action?: string;
   createdAt: string;
   payload?: {
+    commitCount?: number; // Actual commit count (uses payload.size for PushEvent)
     commits?: Array<{
       message: string;
       sha: string;
@@ -106,33 +107,51 @@ export async function fetchGitHubActivity(user: string, limit = 10): Promise<Git
   try {
     const events: any[] = await gh(`/users/${user}/events/public?per_page=${limit}`);
     
-    return events.map((event) => ({
-      id: event.id,
-      type: event.type,
-      repo: {
-        name: event.repo.name,
-        url: `https://github.com/${event.repo.name}`,
-      },
-      action: event.payload?.action,
-      createdAt: event.created_at,
-      payload: {
-        commits: event.payload?.commits?.map((commit: any) => ({
-          message: commit.message,
-          sha: commit.sha,
-          url: `https://github.com/${event.repo.name}/commit/${commit.sha}`,
-        })),
-        pull_request: event.payload?.pull_request ? {
-          title: event.payload.pull_request.title,
-          url: event.payload.pull_request.html_url,
-          state: event.payload.pull_request.state,
-        } : undefined,
-        issue: event.payload?.issue ? {
-          title: event.payload.issue.title,
-          url: event.payload.issue.html_url,
-          state: event.payload.issue.state,
-        } : undefined,
-      },
-    }));
+    // Filter out duplicate events and ensure we have valid events
+    const seenIds = new Set<string>();
+    const uniqueEvents = events.filter((event) => {
+      if (!event.id || !event.type || !event.repo || seenIds.has(event.id)) {
+        return false;
+      }
+      seenIds.add(event.id);
+      return true;
+    });
+    
+    return uniqueEvents.map((event) => {
+      // For PushEvent, use payload.size for commit count (more reliable than commits.length)
+      const commitCount = event.type === 'PushEvent' 
+        ? (event.payload?.size || event.payload?.commits?.length || 0)
+        : (event.payload?.commits?.length || 0);
+      
+      return {
+        id: event.id,
+        type: event.type,
+        repo: {
+          name: event.repo.name,
+          url: `https://github.com/${event.repo.name}`,
+        },
+        action: event.payload?.action,
+        createdAt: event.created_at,
+        payload: {
+          commitCount, // Store the actual commit count
+          commits: event.payload?.commits?.map((commit: any) => ({
+            message: commit.message,
+            sha: commit.sha,
+            url: `https://github.com/${event.repo.name}/commit/${commit.sha}`,
+          })) || [],
+          pull_request: event.payload?.pull_request ? {
+            title: event.payload.pull_request.title,
+            url: event.payload.pull_request.html_url,
+            state: event.payload.pull_request.state,
+          } : undefined,
+          issue: event.payload?.issue ? {
+            title: event.payload.issue.title,
+            url: event.payload.issue.html_url,
+            state: event.payload.issue.state,
+          } : undefined,
+        },
+      };
+    });
   } catch (error) {
     console.error('Error fetching GitHub activity:', error);
     return [];
