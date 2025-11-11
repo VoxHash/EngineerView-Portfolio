@@ -10,6 +10,7 @@ import StructuredData from "@/components/StructuredData";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import SkipLink from "@/components/SkipLink";
 import WebVitals from "@/components/WebVitals";
+import ConsentBanner from "@/components/ConsentBanner";
 
 export const metadata: Metadata = generateSEOMetadata({
   title: SITE.name,
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Header/>
             <main id="main-content" className="container" role="main">{children}</main>
             <Footer/>
+            <ConsentBanner />
           </ThemeProvider>
         </ErrorBoundary>
       </body>
