@@ -1,9 +1,29 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import SocialRow from "./SocialRow";
 import { SITE } from "@/lib/site";
 
 export default function SimpleAnimatedHero() {
+  const [floatingElements, setFloatingElements] = useState<Array<{
+    left: number;
+    top: number;
+    delay: number;
+    duration: number;
+  }>>([]);
+
+  useEffect(() => {
+    // Generate random positions only on client side to avoid hydration mismatch
+    setFloatingElements(
+      Array.from({ length: 6 }, () => ({
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        delay: Math.random() * 2,
+        duration: 3 + Math.random() * 2
+      }))
+    );
+  }, []);
+
   return (
     <section className="relative py-12 overflow-hidden">
       {/* Animated Background */}
@@ -13,15 +33,15 @@ export default function SimpleAnimatedHero() {
 
       {/* Floating Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(6)].map((_, i) => (
+        {floatingElements.map((element, i) => (
           <div
             key={i}
             className="absolute w-2 h-2 bg-brand/20 rounded-full animate-float"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${3 + Math.random() * 2}s`
+              left: `${element.left}%`,
+              top: `${element.top}%`,
+              animationDelay: `${element.delay}s`,
+              animationDuration: `${element.duration}s`
             }}
           />
         ))}
