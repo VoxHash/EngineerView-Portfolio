@@ -5,6 +5,7 @@ import { X, Cookie, Settings } from 'lucide-react';
 import { grantAllConsent, denyAllConsent, storeConsent, getStoredConsent, updateConsentMode, type ConsentSettings, type ConsentState } from '@/lib/consent';
 
 export default function ConsentBanner() {
+  const [mounted, setMounted] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [consentSettings, setConsentSettings] = useState<ConsentSettings>({
@@ -16,6 +17,9 @@ export default function ConsentBanner() {
   });
 
   useEffect(() => {
+    // Mark as mounted to ensure consistent server/client rendering
+    setMounted(true);
+    
     // Check if user has already given consent
     const stored = getStoredConsent();
     if (!stored) {
@@ -74,7 +78,8 @@ export default function ConsentBanner() {
     });
   };
 
-  if (!showBanner) {
+  // Don't render until mounted to avoid hydration mismatch
+  if (!mounted || !showBanner) {
     return null;
   }
 
