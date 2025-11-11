@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     url: post.link,
     image: post.thumbnail || "/og.png",
     type: "article",
-    publishedTime: post.publishedAt,
+    publishedTime: post.pubDate,
     author: "VoxHash",
     tags: post.categories || [],
   });
@@ -46,7 +46,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     title: post.title,
     description: post.description,
     image: post.thumbnail || "/og.png",
-    publishedTime: post.publishedAt,
+    publishedTime: post.pubDate,
     author: "VoxHash",
     section: "Blog",
     tags: post.categories || [],
