@@ -46,6 +46,52 @@ export default function ResumePage() {
     }
   };
 
+  const handleGenerateNewPDF = async () => {
+    try {
+      // Show loading state
+      setPdfError(false);
+      
+      // Generate new PDF from API with latest data
+      const response = await fetch('/api/resume/pdf');
+      if (!response.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+      
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      // Update the iframe to show the newly generated PDF
+      // Use blob URL directly - browsers support this for PDFs
+      if (iframeRef.current && !useGoogleViewer) {
+        iframeRef.current.src = blobUrl + '#toolbar=1&navpanes=1&scrollbar=1&view=FitH';
+      } else if (useGoogleViewer) {
+        // For Google Viewer, we need to use the blob URL
+        // Note: Google Viewer might not work with blob URLs, so we'll switch to native viewer
+        setUseGoogleViewer(false);
+        // Small delay to ensure state update
+        setTimeout(() => {
+          if (iframeRef.current) {
+            iframeRef.current.src = blobUrl + '#toolbar=1&navpanes=1&scrollbar=1&view=FitH';
+          }
+        }, 100);
+      }
+      
+      // Also trigger download
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = 'VoxHash_Resume.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Note: We don't revoke the blob URL because the iframe needs it
+      // It will be cleaned up when the page is unloaded or when a new PDF is generated
+    } catch (error) {
+      console.error('Error generating new PDF:', error);
+      setPdfError(true);
+    }
+  };
+
   const handlePrint = () => {
     // Try to print from the iframe first (for native PDF viewer)
     const iframe = iframeRef.current || document.querySelector('iframe[title*="Resume"]') as HTMLIFrameElement;
@@ -144,7 +190,7 @@ export default function ResumePage() {
           </button>
           
           <button
-            onClick={handleDownload}
+            onClick={handleGenerateNewPDF}
             className="badge hover:bg-brand/10 hover:text-brand transition-colors duration-200 flex items-center gap-2"
           >
             <Download className="h-4 w-4" />

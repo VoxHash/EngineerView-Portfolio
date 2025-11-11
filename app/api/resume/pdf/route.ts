@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SITE } from '@/lib/site';
-import { fetchPinnedRepos, fetchRecentRepos } from '@/lib/github';
-import { createSuccessResponse, handleError } from '@/lib/errors';
+import { handleError } from '@/lib/errors';
 import { getCacheControlHeader } from '@/lib/cache';
+import { timelineData } from '@/data/timeline';
 import puppeteer from 'puppeteer';
 
 // Force dynamic rendering - this route should never be statically generated
@@ -11,11 +11,8 @@ export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   try {
-    // Fetch data from the website
-    const [pinnedRepos, recentRepos] = await Promise.all([
-      fetchPinnedRepos(SITE.githubUser),
-      fetchRecentRepos(SITE.githubUser, 3)
-    ]);
+    // Filter timeline data to only include work experience
+    const workExperience = timelineData.filter(item => item.type === 'work');
 
     // Generate HTML content for the PDF
     const htmlContent = `
@@ -71,6 +68,7 @@ export async function GET(request: NextRequest) {
             gap: 30px;
             flex-wrap: wrap;
             font-size: 0.9em;
+            color: #666;
         }
         
         .section {
@@ -150,26 +148,37 @@ export async function GET(request: NextRequest) {
             margin-bottom: 20px;
         }
         
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
         .exp-title {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
+            font-weight: 700;
+            color: #000;
+            font-size: 1.05em;
         }
         
         .exp-company {
-            color: #7C3AED;
-            font-weight: 500;
+            color: #000;
+            font-weight: 600;
+            font-size: 0.95em;
         }
         
         .exp-dates {
             color: #666;
-            font-size: 0.9em;
-            margin-bottom: 10px;
+            font-size: 0.85em;
+            font-weight: 500;
+            white-space: nowrap;
         }
         
         .exp-desc {
-            color: #555;
+            color: #4a4a4a;
             font-size: 0.9em;
+            line-height: 1.6;
+            margin-top: 6px;
         }
         
         .stats {
@@ -199,16 +208,24 @@ export async function GET(request: NextRequest) {
         
         .footer {
             text-align: center;
-            margin-top: 40px;
+            margin-top: 35px;
             padding-top: 20px;
-            border-top: 1px solid #E5E7EB;
-            color: #666;
-            font-size: 0.9em;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.75em;
         }
         
         @media print {
-            body { -webkit-print-color-adjust: exact; }
-            .container { padding: 20px; }
+            body { 
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .container { 
+                padding: 20px 30px;
+            }
+            .section {
+                page-break-inside: avoid;
+            }
         }
     </style>
 </head>
@@ -216,53 +233,12 @@ export async function GET(request: NextRequest) {
     <div class="container">
         <div class="header">
             <div class="name">${SITE.name}</div>
-            <div class="title">Senior Software Engineer • AI • Systems • Creator</div>
+            <div class="title">Senior Software Engineer</div>
             <div class="contact">
-                <span>📧 ${SITE.email}</span>
-                <span>🌐 ${SITE.url}</span>
-                <span>💼 GitHub: ${SITE.githubUser}</span>
+                <span>${SITE.email}</span>
+                <span>${SITE.url}</span>
+                <span>github.com/${SITE.githubUser}</span>
             </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">Professional Summary</div>
-            <p>${SITE.description}</p>
-        </div>
-
-        <div class="section">
-            <div class="section-title">GitHub Statistics</div>
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-number">${pinnedRepos.reduce((sum, repo) => sum + repo.stargazers_count, 0)}</div>
-                    <div class="stat-label">Total Stars</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">${pinnedRepos.reduce((sum, repo) => sum + repo.forks_count, 0)}</div>
-                    <div class="stat-label">Total Forks</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">${pinnedRepos.length}</div>
-                    <div class="stat-label">Featured Projects</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">${recentRepos.length}</div>
-                    <div class="stat-label">Recent Updates</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">Featured Projects</div>
-            ${pinnedRepos.map(repo => `
-                <div class="project">
-                    <div class="project-title">${repo.name}</div>
-                    <div class="project-desc">${repo.description || 'No description available'}</div>
-                    <div class="project-meta">
-                        ⭐ ${repo.stargazers_count} stars • 🍴 ${repo.forks_count} forks • 
-                        ${repo.language || 'Other'} • Updated ${new Date(repo.pushed_at).toLocaleDateString()}
-                    </div>
-                </div>
-            `).join('')}
         </div>
 
         <div class="section">
@@ -309,37 +285,17 @@ export async function GET(request: NextRequest) {
 
         <div class="section">
             <div class="section-title">Professional Experience</div>
-            <div class="experience">
-                <div class="exp-title">Senior Software Engineer</div>
-                <div class="exp-company">TechCorp Inc. • Remote</div>
-                <div class="exp-dates">2022 - Present</div>
-                <div class="exp-desc">
-                    Led development of scalable microservices and frontend applications using Next.js, Node.js, and AWS. 
-                    Mentored junior engineers and contributed to architectural decisions. Built AI-powered features 
-                    and optimized performance for applications serving 100K+ users.
-                </div>
-            </div>
-            <div class="experience">
-                <div class="exp-title">Full-Stack Developer</div>
-                <div class="exp-company">StartupXYZ • Remote</div>
-                <div class="exp-dates">2020 - 2022</div>
-                <div class="exp-desc">
-                    Developed full-stack web applications using React, Node.js, and PostgreSQL. 
-                    Implemented CI/CD pipelines and contributed to open source projects. 
-                    Built responsive UIs and RESTful APIs.
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">Recent Activity</div>
-            ${recentRepos.map(repo => `
-                <div class="project">
-                    <div class="project-title">${repo.name}</div>
-                    <div class="project-desc">${repo.description || 'No description available'}</div>
-                    <div class="project-meta">
-                        ⭐ ${repo.stargazers_count} stars • ${repo.language || 'Other'} • 
-                        Updated ${new Date(repo.pushed_at).toLocaleDateString()}
+            ${workExperience.map(exp => `
+                <div class="experience">
+                    <div class="exp-header">
+                        <div>
+                            <div class="exp-title">${exp.title}</div>
+                            <div class="exp-company">${exp.company || ''}</div>
+                        </div>
+                        <div class="exp-dates">${exp.date}</div>
+                    </div>
+                    <div class="exp-desc">
+                        ${exp.description}
                     </div>
                 </div>
             `).join('')}
