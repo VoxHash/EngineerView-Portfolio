@@ -87,6 +87,72 @@ This guide helps you resolve common issues when working with EnginerView Portfol
    curl -H "Authorization: token YOUR_TOKEN" https://api.github.com/rate_limit
    ```
 
+### GitHub Activity Feed Not Displaying
+
+**Problem**: The GitHub Activity Feed shows "No recent activity found" even after setting `GITHUB_USERNAME` and `GITHUB_TOKEN`.
+
+**Symptoms**:
+- Empty activity feed with message "No recent activity found"
+- No error messages in console
+- API returns empty array
+
+**Solutions**:
+
+1. **Verify Environment Variables**:
+   ```bash
+   # Check .env.local file
+   cat .env.local | grep GITHUB
+   
+   # Should show:
+   # GITHUB_USERNAME=your-actual-username
+   # GITHUB_TOKEN=ghp_your_token_here
+   ```
+
+2. **Check Browser Console**:
+   - Open DevTools (F12) → Console tab
+   - Look for messages like:
+     - "No GitHub activity returned from API"
+     - "Loaded X GitHub activities"
+     - Any HTTP error codes (401, 403, 404, 429)
+
+3. **Test API Directly**:
+   ```bash
+   # Test the API endpoint
+   curl https://your-domain.com/api/github/activity?limit=10
+   
+   # Or in browser, visit:
+   # https://your-domain.com/api/github/activity?limit=10
+   ```
+
+4. **Check Server Logs**:
+   - Development: Check terminal where `npm run dev` is running
+   - Production (Vercel): Check Function Logs in Vercel dashboard
+   - Look for:
+     - "Fetching GitHub activity for user: [username]"
+     - "Fetched X activities for [username]"
+     - Error messages
+
+5. **Common Issues**:
+   - **No public activity**: Feed only shows public events. Ensure you have recent public commits, PRs, or issues
+   - **Rate limiting**: Without `GITHUB_TOKEN`, limit is 60/hour. Add token for 5,000/hour
+   - **Invalid username**: Verify `GITHUB_USERNAME` matches your actual GitHub username (case-sensitive)
+   - **Token permissions**: Ensure `GITHUB_TOKEN` has `public_repo` scope
+   - **Empty pushes filtered**: Push events with 0 commits are automatically filtered out
+
+6. **Verify GitHub API Access**:
+   ```bash
+   # Test GitHub API directly
+   curl https://api.github.com/users/YOUR_USERNAME/events/public?per_page=10
+   
+   # With token (replace YOUR_TOKEN):
+   curl -H "Authorization: token YOUR_TOKEN" https://api.github.com/users/YOUR_USERNAME/events/public?per_page=10
+   ```
+
+7. **For Production (Vercel)**:
+   - Go to Vercel Dashboard → Your Project → Settings → Environment Variables
+   - Ensure `GITHUB_USERNAME` and `GITHUB_TOKEN` are set
+   - Redeploy after adding variables
+
 ### Theme Not Working
 
 **Problem**: Dark/light theme toggle is not working properly.
