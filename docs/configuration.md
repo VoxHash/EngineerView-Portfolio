@@ -93,6 +93,47 @@ X_BEARER_TOKEN=your-x-bearer-token
 | `TWITTER_BEARER_TOKEN` | No | string | - | Twitter API v2 Bearer Token |
 | `X_BEARER_TOKEN` | No | string | - | Alternative to TWITTER_BEARER_TOKEN |
 
+### How to Get GitHub Token
+
+The `GITHUB_TOKEN` is optional but recommended. Without it, you'll have a rate limit of 60 requests/hour. With authentication, you get 5,000 requests/hour.
+
+**Steps to create a GitHub Personal Access Token (PAT):**
+
+1. **Go to GitHub Settings**
+   - Visit: https://github.com/settings/tokens
+   - Or: GitHub → Your Profile → Settings → Developer settings → Personal access tokens → Tokens (classic)
+
+2. **Generate New Token**
+   - Click "Generate new token" → "Generate new token (classic)"
+   - Give it a descriptive name (e.g., "Portfolio Site API Access")
+   - Set expiration (recommended: 90 days or custom)
+
+3. **Select Scopes**
+   - For this project, you only need: **`public_repo`** (read-only access to public repositories)
+   - This is sufficient for fetching your public repositories and activity
+
+4. **Generate and Copy**
+   - Click "Generate token"
+   - **Important**: Copy the token immediately - you won't be able to see it again!
+   - The token will look like: `ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
+
+5. **Add to Environment Variables**
+   ```bash
+   # Add to your .env.local file
+   GITHUB_TOKEN=ghp_your_token_here
+   ```
+
+**Security Notes:**
+- Never commit the token to version control
+- Keep it in `.env.local` (which is gitignored)
+- If the token is exposed, revoke it immediately and generate a new one
+- For production (Vercel), add it as an environment variable in your deployment settings
+
+**What the token enables:**
+- Higher API rate limits (5,000/hour vs 60/hour)
+- Access to private repository metadata (if you grant `repo` scope)
+- More reliable API responses
+
 ## ⚙️ Site Configuration
 
 ### Basic Configuration
