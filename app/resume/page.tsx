@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Download, Printer, Eye, EyeOff, ExternalLink } from "lucide-react";
 import { useAnalytics } from "@/components/Analytics";
 
@@ -9,6 +9,7 @@ export default function ResumePage() {
   const [pdfUrl, setPdfUrl] = useState('');
   const [pdfError, setPdfError] = useState(false);
   const { trackDownload } = useAnalytics();
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     // Set the PDF URL after component mounts to avoid SSR issues
@@ -46,7 +47,43 @@ export default function ResumePage() {
   };
 
   const handlePrint = () => {
-    window.print();
+    // Try to print from the iframe first (for native PDF viewer)
+    const iframe = iframeRef.current || document.querySelector('iframe[title*="Resume"]') as HTMLIFrameElement;
+    
+    if (iframe && iframe.contentWindow) {
+      try {
+        // Try to access the iframe's print function
+        // This works for same-origin PDFs in native viewers (Chrome, Edge, Firefox)
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+        return;
+      } catch (e) {
+        // Cross-origin restriction or iframe not ready - fall through to alternative method
+        console.log('Cannot access iframe print, using alternative method');
+      }
+    }
+    
+    // Alternative: Open PDF in new window and print
+    // This ensures the PDF itself is printed, not the webpage
+    const printWindow = window.open('/VoxHash_Resume.pdf', '_blank');
+    if (printWindow) {
+      // For PDFs, we need to wait for the PDF viewer to initialize
+      // Different browsers handle this differently, so we use a reasonable delay
+      setTimeout(() => {
+        try {
+          printWindow.focus();
+          printWindow.print();
+        } catch (e) {
+          console.error('Error printing PDF:', e);
+          // If print fails, at least the PDF is open in a new tab
+          // User can manually print from there
+        }
+      }, 1000);
+    } else {
+      // Popup blocked - fallback: Use browser print with CSS hiding non-PDF content
+      // This is not ideal but better than nothing
+      window.print();
+    }
   };
 
   const toggleFullscreen = () => {
@@ -162,6 +199,7 @@ export default function ResumePage() {
               />
             ) : (
               <iframe
+                ref={iframeRef}
                 src="/VoxHash_Resume.pdf#toolbar=1&navpanes=1&scrollbar=1&view=FitH"
                 className="w-full h-[800px] border-0 rounded-lg"
                 title="VoxHash Resume"
