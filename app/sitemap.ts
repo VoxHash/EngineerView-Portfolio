@@ -50,7 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...((process.env.TWITTER_USERNAME || process.env.X_USERNAME) ? [{
       url: `${base}/twitter`,
       lastModified: now,
-      changeFrequency: 'daily',
+      changeFrequency: 'daily' as const,
       priority: 0.6,
     }] : []),
     {
