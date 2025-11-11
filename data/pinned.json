@@ -1,0 +1,74 @@
+[
+  {
+    "id": "voxhash-portfolio",
+    "name": "VoxHash Portfolio",
+    "description": "Modern portfolio website built with Next.js, TypeScript, and Tailwind CSS. Features dark/light theme, animations, and responsive design.",
+    "url": "https://github.com/VoxHash/EngineerView-Portfolio",
+    "language": "TypeScript",
+    "stars": 42,
+    "forks": 8,
+    "topics": ["nextjs", "typescript", "tailwind", "portfolio", "framer-motion"],
+    "featured": true,
+    "liveUrl": "https://voxhash.dev"
+  },
+  {
+    "id": "ai-chat-app",
+    "name": "AI Chat Application",
+    "description": "Real-time chat application with AI integration using OpenAI API. Built with React, Node.js, and WebSocket for instant messaging.",
+    "url": "https://github.com/VoxHash/ai-chat-app",
+    "language": "JavaScript",
+    "stars": 128,
+    "forks": 23,
+    "topics": ["react", "nodejs", "openai", "websocket", "ai"],
+    "featured": true,
+    "liveUrl": "https://ai-chat.voxhash.dev"
+  },
+  {
+    "id": "dev-tools-cli",
+    "name": "Dev Tools CLI",
+    "description": "Command-line toolkit for developers with utilities for project setup, code generation, and deployment automation.",
+    "url": "https://github.com/VoxHash/dev-tools-cli",
+    "language": "Go",
+    "stars": 89,
+    "forks": 15,
+    "topics": ["go", "cli", "developer-tools", "automation"],
+    "featured": true,
+    "liveUrl": null
+  },
+  {
+    "id": "data-visualization",
+    "name": "Data Visualization Dashboard",
+    "description": "Interactive dashboard for visualizing complex datasets with D3.js and React. Supports real-time data updates and custom chart types.",
+    "url": "https://github.com/VoxHash/data-viz-dashboard",
+    "language": "TypeScript",
+    "stars": 67,
+    "forks": 12,
+    "topics": ["react", "d3js", "typescript", "data-viz", "dashboard"],
+    "featured": false,
+    "liveUrl": "https://data-viz.voxhash.dev"
+  },
+  {
+    "id": "microservices-auth",
+    "name": "Microservices Authentication",
+    "description": "JWT-based authentication service for microservices architecture. Includes user management, role-based access control, and API security.",
+    "url": "https://github.com/VoxHash/microservices-auth",
+    "language": "Python",
+    "stars": 156,
+    "forks": 31,
+    "topics": ["python", "jwt", "microservices", "auth", "fastapi"],
+    "featured": true,
+    "liveUrl": null
+  },
+  {
+    "id": "mobile-app-react-native",
+    "name": "Cross-Platform Mobile App",
+    "description": "React Native application with offline support, push notifications, and native performance optimizations.",
+    "url": "https://github.com/VoxHash/mobile-app-rn",
+    "language": "JavaScript",
+    "stars": 73,
+    "forks": 18,
+    "topics": ["react-native", "mobile", "offline", "notifications"],
+    "featured": false,
+    "liveUrl": null
+  }
+]
