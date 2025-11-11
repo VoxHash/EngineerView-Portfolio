@@ -35,7 +35,7 @@ We follow semantic versioning (MAJOR.MINOR.PATCH) with planned releases every 2-
 - [x] **Additional Platform Integrations**
   - [x] Twitter/X feed integration (optional)
   - [x] Enhanced GitHub activity display
-  - [x] Improved video platform support (Kick, Vimeo, additional platforms)
+  - [x] Improved video platform support (Vimeo, additional platforms)
 
 #### Technical Improvements
 - [x] API rate limiting and caching improvements

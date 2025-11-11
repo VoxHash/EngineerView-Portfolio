@@ -52,7 +52,6 @@ YOUTUBE_CHANNEL_ID=your-youtube-channel-id
 YOUTUBE_API_KEY=your-youtube-api-key
 TWITCH_CHANNEL_NAME=your-twitch-channel-name
 TWITCH_CLIENT_ID=your-twitch-client-id
-KICK_CHANNEL_NAME=your-kick-channel-name
 VIMEO_USER_ID=your-vimeo-user-id
 VIMEO_ACCESS_TOKEN=your-vimeo-access-token
 
@@ -85,7 +84,6 @@ X_BEARER_TOKEN=your-x-bearer-token
 | `YOUTUBE_API_KEY` | No | string | - | YouTube Data API v3 key (optional, for enhanced data - see [How to Get YouTube API Key](#how-to-get-youtube-api-key)) |
 | `TWITCH_CHANNEL_NAME` | No | string | - | Twitch channel username |
 | `TWITCH_CLIENT_ID` | No | string | - | Twitch API client ID |
-| `KICK_CHANNEL_NAME` | No | string | - | Kick channel username |
 | `VIMEO_USER_ID` | No | string | - | Vimeo user ID |
 | `VIMEO_ACCESS_TOKEN` | No | string | - | Vimeo API access token |
 | `TWITTER_USERNAME` | No | string | - | Twitter/X username (for feed page) |
