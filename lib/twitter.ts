@@ -40,6 +40,9 @@ interface TwitterAPIResponse {
       reply_count: number;
     };
     author_id?: string;
+    attachments?: {
+      media_keys?: string[];
+    };
   }[];
   includes?: {
     users?: {
