@@ -161,21 +161,53 @@ export async function fetchYouTubeVideosAPI(
   limit: number = 10
 ): Promise<Video[]> {
   try {
+    // Check if channelId is a handle (starts with @) and convert it
+    let actualChannelId = channelId;
+    if (channelId.startsWith('@')) {
+      // Try to get channel ID from handle
+      const handleResponse = await fetch(
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${encodeURIComponent(channelId)}&key=${apiKey}`,
+        getFetchCacheOptions('DYNAMIC')
+      );
+      
+      if (handleResponse.ok) {
+        const handleData = await handleResponse.json();
+        const channel = handleData.items?.find((item: any) => 
+          item.snippet?.customUrl?.toLowerCase() === channelId.toLowerCase()
+        );
+        if (channel) {
+          actualChannelId = channel.id.channelId;
+          console.log(`Converted YouTube handle ${channelId} to channel ID: ${actualChannelId}`);
+        } else {
+          throw new Error(`YouTube channel handle ${channelId} not found. Use channel ID (starts with UC) instead.`);
+        }
+      }
+    }
+
     // First, get uploads playlist ID
     const channelResponse = await fetch(
-      `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${apiKey}`,
+      `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${actualChannelId}&key=${apiKey}`,
       getFetchCacheOptions('DYNAMIC')
     );
 
     if (!channelResponse.ok) {
+      const errorData = await channelResponse.json().catch(() => ({}));
+      if (channelResponse.status === 403) {
+        throw new Error(`YouTube API 403: ${errorData.error?.message || 'API key may be invalid, restricted, or channel ID incorrect. Channel ID should start with UC (e.g., UCxxxxxxxxxxxxx), not @handle'}`);
+      }
       throw new Error(`Failed to fetch YouTube channel: ${channelResponse.status}`);
     }
 
     const channelData = await channelResponse.json();
-    const uploadsPlaylistId = channelData.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
+    
+    if (!channelData.items || channelData.items.length === 0) {
+      throw new Error(`YouTube channel not found. Make sure you're using a channel ID (starts with UC), not a handle. Current value: ${channelId}`);
+    }
+    
+    const uploadsPlaylistId = channelData.items[0]?.contentDetails?.relatedPlaylists?.uploads;
 
     if (!uploadsPlaylistId) {
-      throw new Error('Uploads playlist not found');
+      throw new Error(`Uploads playlist not found for channel ${actualChannelId}. The channel may have no videos or the API key may lack permissions.`);
     }
 
     // Get videos from uploads playlist
@@ -223,9 +255,13 @@ export async function fetchYouTubeVideosAPI(
     
     // Log more details for debugging
     if (errorMessage.includes('403')) {
-      console.warn('YouTube API 403: Check API key validity, restrictions, or channel ID');
+      console.warn('YouTube API 403: Check API key validity, restrictions, or channel ID. Channel ID should start with UC (e.g., UCxxxxxxxxxxxxx), not @handle');
     } else if (errorMessage.includes('401')) {
       console.warn('YouTube API 401: API key may be invalid or expired');
+    } else if (errorMessage.includes('Uploads playlist not found')) {
+      console.warn('YouTube: Channel may have no videos, or channel ID format is incorrect. Use channel ID (starts with UC), not @handle');
+    } else if (errorMessage.includes('channel not found')) {
+      console.warn('YouTube: Invalid channel ID. Use channel ID (starts with UC), not @handle. Get your channel ID from: https://www.youtube.com/account_advanced');
     }
     
     // Return empty array to gracefully handle errors

@@ -198,6 +198,14 @@ The `YOUTUBE_API_KEY` is optional. Without it, the site will use YouTube's RSS f
 - No view counts or duration
 - Simpler setup
 
+**Important: Channel ID vs Handle**
+- The YouTube Data API v3 requires a **Channel ID** (starts with `UC`, e.g., `UCxxxxxxxxxxxxx`)
+- Do NOT use a channel handle (e.g., `@voxhash`) - this will cause "Uploads playlist not found" errors
+- To find your Channel ID:
+  1. Go to https://www.youtube.com/account_advanced
+  2. Your Channel ID is displayed there (format: `UCxxxxxxxxxxxxx`)
+  3. Or use a tool like https://commentpicker.com/youtube-channel-id.php
+
 ## ⚙️ Site Configuration
 
 ### Basic Configuration
