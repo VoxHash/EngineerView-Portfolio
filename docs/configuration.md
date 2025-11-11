@@ -84,8 +84,8 @@ X_BEARER_TOKEN=your-x-bearer-token
 | `YOUTUBE_API_KEY` | No | string | - | YouTube Data API v3 key (optional, for enhanced data - see [How to Get YouTube API Key](#how-to-get-youtube-api-key)) |
 | `TWITCH_CHANNEL_NAME` | No | string | - | Twitch channel username |
 | `TWITCH_CLIENT_ID` | No | string | - | Twitch API client ID |
-| `VIMEO_USER_ID` | No | string | - | Vimeo user ID |
-| `VIMEO_ACCESS_TOKEN` | No | string | - | Vimeo API access token |
+| `VIMEO_USER_ID` | No | string | - | Vimeo user ID (see [How to Get Vimeo Credentials](#how-to-get-vimeo-credentials)) |
+| `VIMEO_ACCESS_TOKEN` | No | string | - | Vimeo API access token (see [How to Get Vimeo Credentials](#how-to-get-vimeo-credentials)) |
 | `TWITTER_USERNAME` | No | string | - | Twitter/X username (for feed page) |
 | `X_USERNAME` | No | string | - | Alternative to TWITTER_USERNAME |
 | `TWITTER_BEARER_TOKEN` | No | string | - | Twitter API v2 Bearer Token |
@@ -205,6 +205,67 @@ The `YOUTUBE_API_KEY` is optional. Without it, the site will use YouTube's RSS f
   1. Go to https://www.youtube.com/account_advanced
   2. Your Channel ID is displayed there (format: `UCxxxxxxxxxxxxx`)
   3. Or use a tool like https://commentpicker.com/youtube-channel-id.php
+
+### How to Get Vimeo Credentials
+
+The `VIMEO_USER_ID` and `VIMEO_ACCESS_TOKEN` are required to fetch videos from Vimeo. Vimeo uses OAuth 2.0 for API authentication.
+
+**Steps to get Vimeo User ID and Access Token:**
+
+1. **Go to Vimeo Developer Portal**
+   - Visit: https://developer.vimeo.com/
+   - Sign in with your Vimeo account
+
+2. **Create a New App**
+   - Click "Create a new app" or go to: https://developer.vimeo.com/apps
+   - Fill in the app details:
+     - **App Name**: e.g., "Portfolio Site"
+     - **App URL**: Your website URL (e.g., `https://voxhash.dev`)
+     - **App Description**: Brief description of your use case
+   - Click "Create app"
+
+3. **Generate an Access Token**
+   - After creating the app, you'll see the app details page
+   - Scroll down to "Authentication" section
+   - Click "Generate" next to "Access Token"
+   - Select the scopes you need:
+     - **`public`**: Read public video information (required)
+     - **`private`**: Read private video information (if you have private videos)
+   - Click "Generate"
+   - **Important**: Copy the access token immediately - you won't be able to see it again!
+   - The token will look like: `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
+
+4. **Find Your User ID**
+   - Go to your Vimeo profile: https://vimeo.com/settings/profile
+   - Your User ID is in the URL: `https://vimeo.com/user12345678` → User ID is `12345678`
+   - Or go to: https://vimeo.com/api/oauth2/verify
+   - This will show your user information including your user ID
+   - The User ID is a number (e.g., `12345678`)
+
+5. **Add to Environment Variables**
+   ```bash
+   # Add to your .env.local file
+   VIMEO_USER_ID=12345678
+   VIMEO_ACCESS_TOKEN=your_access_token_here
+   ```
+
+**Important Notes:**
+- **Access Token Security**: Treat your access token like a password - never commit it to version control
+- **Token Expiration**: Access tokens don't expire by default, but you can revoke them anytime
+- **Scopes**: Only request the scopes you need (`public` is usually sufficient)
+- **Rate Limits**: Vimeo API has rate limits (varies by plan)
+- **Production**: Add both variables as environment variables in your deployment settings (Vercel)
+
+**What the credentials enable:**
+- Fetch your public videos from Vimeo
+- Get video metadata (title, description, thumbnails, duration)
+- View counts and statistics
+- Video URLs and embed information
+
+**Troubleshooting:**
+- **401 Error**: Access token may be invalid or expired. Generate a new one.
+- **404 Error**: User ID may be incorrect. Double-check your user ID.
+- **403 Error**: Access token may not have the required scopes. Regenerate with `public` scope.
 
 ## ⚙️ Site Configuration
 
