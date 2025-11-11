@@ -184,14 +184,13 @@ export async function fetchTweetsRSS(
         
         tweets.push({
           id: tweetId || `rss-${tweets.length}`,
-          text: titleMatch[1],
+          text: descriptionMatch?.[1] || titleMatch[1],
           author: {
             name: username,
             username: username,
           },
           publishedAt: pubDateMatch[1],
           url: linkMatch[1],
-          description: descriptionMatch?.[1] || titleMatch[1],
         });
       }
     }
