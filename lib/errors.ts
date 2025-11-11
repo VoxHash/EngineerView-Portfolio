@@ -146,7 +146,8 @@ export function validateRequiredFields<T extends Record<string, unknown>>(
   const missingFields: string[] = [];
   
   for (const field of requiredFields) {
-    if (!data[field] || (typeof data[field] === 'string' && data[field].trim() === '')) {
+    const value = data[field];
+    if (!value || (typeof value === 'string' && value.trim() === '')) {
       missingFields.push(String(field));
     }
   }
