@@ -82,7 +82,7 @@ X_BEARER_TOKEN=your-x-bearer-token
 | `REDDIT_USERNAME` | No | string | - | Reddit username (for feed page) |
 | `REDDIT_SUBREDDIT` | No | string | `programming` | Fallback subreddit if user posts fail |
 | `YOUTUBE_CHANNEL_ID` | No | string | - | YouTube channel ID (for RSS feed, no API key needed) |
-| `YOUTUBE_API_KEY` | No | string | - | YouTube Data API v3 key (optional, for enhanced data) |
+| `YOUTUBE_API_KEY` | No | string | - | YouTube Data API v3 key (optional, for enhanced data - see [How to Get YouTube API Key](#how-to-get-youtube-api-key)) |
 | `TWITCH_CHANNEL_NAME` | No | string | - | Twitch channel username |
 | `TWITCH_CLIENT_ID` | No | string | - | Twitch API client ID |
 | `KICK_CHANNEL_NAME` | No | string | - | Kick channel username |
@@ -133,6 +133,72 @@ The `GITHUB_TOKEN` is optional but recommended. Without it, you'll have a rate l
 - Higher API rate limits (5,000/hour vs 60/hour)
 - Access to private repository metadata (if you grant `repo` scope)
 - More reliable API responses
+
+### How to Get YouTube API Key
+
+The `YOUTUBE_API_KEY` is optional. Without it, the site will use YouTube's RSS feed (which doesn't require an API key) to fetch your videos. With the API key, you get enhanced data like view counts, video duration, and better metadata.
+
+**Steps to create a YouTube Data API v3 key:**
+
+1. **Go to Google Cloud Console**
+   - Visit: https://console.cloud.google.com/
+   - Sign in with your Google account
+
+2. **Create or Select a Project**
+   - Click the project dropdown at the top
+   - Click "New Project" (or select an existing one)
+   - Give it a name (e.g., "Portfolio Site")
+   - Click "Create"
+
+3. **Enable YouTube Data API v3**
+   - Go to: https://console.cloud.google.com/apis/library
+   - Search for "YouTube Data API v3"
+   - Click on it and click "Enable"
+
+4. **Create Credentials**
+   - Go to: https://console.cloud.google.com/apis/credentials
+   - Click "Create Credentials" → "API Key"
+   - Your API key will be generated immediately
+
+5. **Restrict the API Key (Recommended)**
+   - Click on your newly created API key to edit it
+   - Under "API restrictions":
+     - Select "Restrict key"
+     - Choose "YouTube Data API v3"
+   - Under "Application restrictions":
+     - Select "HTTP referrers (web sites)"
+     - Add your domain: `https://your-domain.com/*`
+     - For local development, add: `http://localhost:3000/*`
+   - Click "Save"
+
+6. **Copy Your API Key**
+   - The API key will look like: `AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`
+   - Copy it immediately
+
+7. **Add to Environment Variables**
+   ```bash
+   # Add to your .env.local file
+   YOUTUBE_API_KEY=AIzaSy_your_api_key_here
+   ```
+
+**Important Notes:**
+- **Free Quota**: YouTube Data API v3 provides 10,000 units/day for free
+- **Cost**: After free quota, it's $0.10 per 1,000 additional units
+- **RSS Alternative**: If you don't want to use the API, just set `YOUTUBE_CHANNEL_ID` and the site will use RSS feeds (no API key needed, but less data)
+- **Security**: Restrict your API key to prevent unauthorized use
+- **Production**: Add the key as an environment variable in your deployment settings (Vercel)
+
+**What the API key enables:**
+- View counts for videos
+- Video duration information
+- Better thumbnail quality
+- More detailed video metadata
+- Channel statistics
+
+**Without API key (RSS feed):**
+- Still works! Just provides basic video information
+- No view counts or duration
+- Simpler setup
 
 ## ⚙️ Site Configuration
 
