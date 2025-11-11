@@ -126,7 +126,7 @@ export async function fetchTweetsAPI(
         author: {
           name: author.name,
           username: author.username,
-          avatar: author.profile_image_url,
+          avatar: 'profile_image_url' in author ? author.profile_image_url : undefined,
         },
         publishedAt: tweet.created_at,
         url: `https://twitter.com/${username}/status/${tweet.id}`,
