@@ -11,8 +11,12 @@ export function reportWebVitals(metric: {
   id: string;
   name: string;
   value: number;
-  label: string;
+  label?: string;
+  rating?: 'good' | 'needs-improvement' | 'poor';
 }) {
+  // Derive label from rating if not provided
+  const label = metric.label || metric.rating || 'unknown';
+  
   // Report to Google Analytics if available
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', metric.name, {
@@ -25,7 +29,7 @@ export function reportWebVitals(metric: {
 
   // Log to console in development
   if (process.env.NODE_ENV === 'development') {
-    console.log('[Web Vitals]', metric.name, metric.value, metric.label);
+    console.log('[Web Vitals]', metric.name, metric.value, label);
   }
 }
 
