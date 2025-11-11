@@ -301,13 +301,19 @@ export async function fetchAllVideos(limit: number = 20): Promise<Video[]> {
     
     if (youtubeApiKey) {
       // Use API if key is available (more data)
+      console.log(`Fetching YouTube videos via API for channel: ${youtubeChannelId}`);
       youtubeVideos = await fetchYouTubeVideosAPI(youtubeChannelId, youtubeApiKey, limit);
+      console.log(`Fetched ${youtubeVideos.length} YouTube videos via API`);
     } else {
       // Fallback to RSS feed (no API key needed)
+      console.log(`Fetching YouTube videos via RSS for channel: ${youtubeChannelId}`);
       youtubeVideos = await fetchYouTubeVideosRSS(youtubeChannelId, limit);
+      console.log(`Fetched ${youtubeVideos.length} YouTube videos via RSS`);
     }
     
     allVideos.push(...youtubeVideos);
+  } else {
+    console.log('YOUTUBE_CHANNEL_ID not configured, skipping YouTube videos');
   }
 
   // Fetch Twitch videos
@@ -315,13 +321,26 @@ export async function fetchAllVideos(limit: number = 20): Promise<Video[]> {
   const twitchClientId = process.env.TWITCH_CLIENT_ID;
   
   if (twitchChannelName && twitchClientId) {
+    console.log(`Fetching Twitch videos for channel: ${twitchChannelName}`);
     const twitchVideos = await fetchTwitchVideos(twitchChannelName, twitchClientId, limit);
+    console.log(`Fetched ${twitchVideos.length} Twitch videos`);
     allVideos.push(...twitchVideos);
+  } else {
+    if (twitchChannelName && !twitchClientId) {
+      console.warn('TWITCH_CHANNEL_NAME is set but TWITCH_CLIENT_ID is missing');
+    } else if (!twitchChannelName && twitchClientId) {
+      console.warn('TWITCH_CLIENT_ID is set but TWITCH_CHANNEL_NAME is missing');
+    } else {
+      console.log('Twitch not configured, skipping Twitch videos');
+    }
   }
 
   // Sort by published date (newest first)
-  return allVideos.sort((a, b) => 
+  const sortedVideos = allVideos.sort((a, b) => 
     new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   ).slice(0, limit);
+  
+  console.log(`Total videos fetched: ${sortedVideos.length}`);
+  return sortedVideos;
 }
 
