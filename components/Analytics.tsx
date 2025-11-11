@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, Suspense } from 'react';
 import { usePathname } from 'next/navigation';
+import { initializeConsentMode, getStoredConsent, updateConsentMode } from '@/lib/consent';
 
 interface AnalyticsProps {
   gaId?: string;
@@ -24,9 +25,9 @@ interface GtagEventParams {
 declare global {
   interface Window {
     gtag: (
-      command: 'config' | 'event' | 'js' | 'set',
-      targetId: string | Date,
-      config?: GtagConfig | GtagEventParams
+      command: 'consent' | 'config' | 'event' | 'js' | 'set',
+      action: 'default' | 'update' | string | Date,
+      params?: GtagConfig | GtagEventParams | Record<string, unknown>
     ) => void;
     dataLayer: unknown[];
   }
@@ -46,16 +47,35 @@ function AnalyticsInner({ gaId }: AnalyticsProps) {
       return;
     }
 
-    // Initialize dataLayer
+    // Initialize dataLayer FIRST (before consent mode)
     window.dataLayer = window.dataLayer || [];
     function gtag(
-      command: 'config' | 'event' | 'js' | 'set',
-      targetId: string | Date,
-      config?: GtagConfig | GtagEventParams
+      command: 'consent' | 'config' | 'event' | 'js' | 'set',
+      action: 'default' | 'update' | string | Date,
+      params?: GtagConfig | GtagEventParams | Record<string, unknown>
     ) {
-      window.dataLayer.push([command, targetId, config]);
+      window.dataLayer.push([command, action, params]);
     }
     window.gtag = gtag;
+
+    // Initialize consent mode BEFORE loading GA script
+    // Check if user has previously given consent
+    const storedConsent = getStoredConsent();
+    if (storedConsent) {
+      // User has previously given consent, restore it
+      initializeConsentMode(storedConsent);
+      updateConsentMode(storedConsent);
+    } else {
+      // Default: deny all (GDPR compliant)
+      // User will need to accept cookies via consent banner
+      initializeConsentMode({
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        functionality_storage: 'denied',
+        personalization_storage: 'denied',
+        security_storage: 'granted',
+      });
+    }
 
     // Load Google Analytics script
     const script1 = document.createElement('script');
