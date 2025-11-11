@@ -43,6 +43,36 @@ export interface TwitchVideoItem {
   view_count: number;
 }
 
+export interface VimeoVideoItem {
+  uri: string;
+  name: string;
+  description: string;
+  pictures: {
+    sizes: Array<{
+      width: number;
+      height: number;
+      link: string;
+    }>;
+  };
+  link: string;
+  created_time: string;
+  duration: number;
+  stats: {
+    plays: number;
+  };
+}
+
+export interface KickVideoItem {
+  id: string;
+  title: string;
+  description?: string;
+  thumbnail?: string;
+  url: string;
+  published_at: string;
+  duration?: string;
+  view_count?: number;
+}
+
 // Extract video ID from YouTube URL
 function extractYouTubeVideoId(url: string): string {
   const patterns = [
@@ -288,6 +318,94 @@ export async function fetchTwitchVideos(
   }
 }
 
+// Fetch Vimeo videos (requires User ID and Access Token)
+export async function fetchVimeoVideos(
+  userId: string,
+  accessToken: string,
+  limit: number = 10
+): Promise<Video[]> {
+  try {
+    const response = await fetch(
+      `https://api.vimeo.com/users/${userId}/videos?per_page=${limit}&sort=date&direction=desc`,
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Accept': 'application/vnd.vimeo.*+json;version=3.4',
+        },
+        ...getFetchCacheOptions('DYNAMIC')
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch Vimeo videos: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!data.data || !Array.isArray(data.data)) {
+      return [];
+    }
+
+    return data.data.map((item: VimeoVideoItem) => {
+      // Get the largest thumbnail
+      const thumbnail = item.pictures?.sizes?.[item.pictures.sizes.length - 1]?.link || '';
+      
+      // Extract video ID from URI (format: /videos/123456)
+      const videoId = item.uri.split('/').pop() || '';
+
+      return {
+        id: videoId,
+        title: item.name,
+        description: item.description || '',
+        thumbnail,
+        url: item.link,
+        publishedAt: item.created_time,
+        platform: 'vimeo' as const,
+        duration: item.duration ? formatDuration(`PT${Math.floor(item.duration)}S`) : undefined,
+        viewCount: item.stats?.plays
+      };
+    });
+
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Error fetching Vimeo videos:', errorMessage);
+    
+    // Log more details for debugging
+    if (errorMessage.includes('401')) {
+      console.warn('Vimeo API 401: Access token may be invalid or expired');
+    } else if (errorMessage.includes('404')) {
+      console.warn('Vimeo API 404: User ID may be incorrect or user not found');
+    }
+    
+    // Return empty array to gracefully handle errors
+    return [];
+  }
+}
+
+// Fetch Kick videos
+// Note: Kick doesn't have a public API yet, so this is a placeholder
+// that can be extended when Kick releases their API
+export async function fetchKickVideos(
+  channelName: string,
+  limit: number = 10
+): Promise<Video[]> {
+  try {
+    // Kick doesn't have a public API yet
+    // This is a placeholder for future implementation
+    // For now, we'll return an empty array
+    console.warn('Kick API is not yet available. This is a placeholder for future implementation.');
+    
+    // TODO: Implement when Kick releases their public API
+    // Potential endpoint: https://kick.com/api/v1/channels/{channelName}/videos
+    
+    return [];
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Error fetching Kick videos:', errorMessage);
+    return [];
+  }
+}
+
 // Main function to fetch all videos
 export async function fetchAllVideos(limit: number = 20): Promise<Video[]> {
   const allVideos: Video[] = [];
@@ -333,6 +451,37 @@ export async function fetchAllVideos(limit: number = 20): Promise<Video[]> {
     } else {
       console.log('Twitch not configured, skipping Twitch videos');
     }
+  }
+
+  // Fetch Vimeo videos
+  const vimeoUserId = process.env.VIMEO_USER_ID;
+  const vimeoAccessToken = process.env.VIMEO_ACCESS_TOKEN;
+  
+  if (vimeoUserId && vimeoAccessToken) {
+    console.log(`Fetching Vimeo videos for user: ${vimeoUserId}`);
+    const vimeoVideos = await fetchVimeoVideos(vimeoUserId, vimeoAccessToken, limit);
+    console.log(`Fetched ${vimeoVideos.length} Vimeo videos`);
+    allVideos.push(...vimeoVideos);
+  } else {
+    if (vimeoUserId && !vimeoAccessToken) {
+      console.warn('VIMEO_USER_ID is set but VIMEO_ACCESS_TOKEN is missing');
+    } else if (!vimeoUserId && vimeoAccessToken) {
+      console.warn('VIMEO_ACCESS_TOKEN is set but VIMEO_USER_ID is missing');
+    } else {
+      console.log('Vimeo not configured, skipping Vimeo videos');
+    }
+  }
+
+  // Fetch Kick videos
+  const kickChannelName = process.env.KICK_CHANNEL_NAME;
+  
+  if (kickChannelName) {
+    console.log(`Fetching Kick videos for channel: ${kickChannelName}`);
+    const kickVideos = await fetchKickVideos(kickChannelName, limit);
+    console.log(`Fetched ${kickVideos.length} Kick videos`);
+    allVideos.push(...kickVideos);
+  } else {
+    console.log('KICK_CHANNEL_NAME not configured, skipping Kick videos');
   }
 
   // Sort by published date (newest first)
