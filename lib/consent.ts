@@ -16,15 +16,7 @@ export interface ConsentSettings {
   security_storage?: ConsentState;
 }
 
-declare global {
-  interface Window {
-    gtag: (
-      command: 'consent' | 'config' | 'event' | 'js' | 'set',
-      action: 'default' | 'update',
-      params?: ConsentSettings | Record<string, unknown>
-    ) => void;
-  }
-}
+// Note: gtag type is declared in components/Analytics.tsx to avoid conflicts
 
 /**
  * Initialize consent mode with default (denied) state

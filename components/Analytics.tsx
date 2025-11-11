@@ -26,7 +26,7 @@ declare global {
   interface Window {
     gtag: (
       command: 'consent' | 'config' | 'event' | 'js' | 'set',
-      action: 'default' | 'update' | string | Date,
+      actionOrTargetId: 'default' | 'update' | string | Date,
       params?: GtagConfig | GtagEventParams | Record<string, unknown>
     ) => void;
     dataLayer: unknown[];
