@@ -82,8 +82,8 @@ X_BEARER_TOKEN=your-x-bearer-token
 | `REDDIT_SUBREDDIT` | No | string | `programming` | Fallback subreddit if user posts fail |
 | `YOUTUBE_CHANNEL_ID` | No | string | - | YouTube channel ID (for RSS feed, no API key needed) |
 | `YOUTUBE_API_KEY` | No | string | - | YouTube Data API v3 key (optional, for enhanced data - see [How to Get YouTube API Key](#how-to-get-youtube-api-key)) |
-| `TWITCH_CHANNEL_NAME` | No | string | - | Twitch channel username |
-| `TWITCH_CLIENT_ID` | No | string | - | Twitch API client ID |
+| `TWITCH_CHANNEL_NAME` | No | string | - | Twitch channel username (see [How to Get Twitch Credentials](#how-to-get-twitch-credentials)) |
+| `TWITCH_CLIENT_ID` | No | string | - | Twitch API client ID (see [How to Get Twitch Credentials](#how-to-get-twitch-credentials)) |
 | `VIMEO_USER_ID` | No | string | - | Vimeo user ID (see [How to Get Vimeo Credentials](#how-to-get-vimeo-credentials)) |
 | `VIMEO_ACCESS_TOKEN` | No | string | - | Vimeo API access token (see [How to Get Vimeo Credentials](#how-to-get-vimeo-credentials)) |
 | `TWITTER_USERNAME` | No | string | - | Twitter/X username (for feed page) |
@@ -266,6 +266,66 @@ The `VIMEO_USER_ID` and `VIMEO_ACCESS_TOKEN` are required to fetch videos from V
 - **401 Error**: Access token may be invalid or expired. Generate a new one.
 - **404 Error**: User ID may be incorrect. Double-check your user ID.
 - **403 Error**: Access token may not have the required scopes. Regenerate with `public` scope.
+
+### How to Get Twitch Credentials
+
+The `TWITCH_CHANNEL_NAME` and `TWITCH_CLIENT_ID` are required to fetch videos from Twitch. Note that Twitch's Helix API requires OAuth authentication for some endpoints, but basic video fetching may work with just a Client ID.
+
+**Steps to get Twitch Channel Name and Client ID:**
+
+1. **Get Your Twitch Channel Name**
+   - Your Twitch channel name is simply your Twitch username
+   - It's the name that appears in your Twitch URL: `https://www.twitch.tv/yourusername`
+   - Example: If your URL is `https://www.twitch.tv/voxhash`, your channel name is `voxhash`
+   - **Important**: Use your exact username (case-sensitive)
+
+2. **Go to Twitch Developer Console**
+   - Visit: https://dev.twitch.tv/console
+   - Sign in with your Twitch account
+
+3. **Register Your Application**
+   - Click "Register Your Application" or go to: https://dev.twitch.tv/console/apps
+   - Fill in the application details:
+     - **Name**: e.g., "Portfolio Site"
+     - **OAuth Redirect URLs**: Your website URL (e.g., `https://voxhash.dev`)
+     - **Category**: Select "Website Integration" or "Other"
+   - Click "Create"
+
+4. **Get Your Client ID**
+   - After creating the application, you'll see your **Client ID**
+   - It will look like: `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
+   - Copy it immediately
+   - **Note**: You can always view this later from the Twitch Developer Console
+
+5. **Add to Environment Variables**
+   ```bash
+   # Add to your .env.local file
+   TWITCH_CHANNEL_NAME=your-twitch-username
+   TWITCH_CLIENT_ID=your_client_id_here
+   ```
+
+**Important Notes:**
+- **Client ID Security**: While not as sensitive as a secret, don't commit it to version control
+- **OAuth Requirements**: Twitch Helix API may require OAuth for some endpoints. The current implementation uses Client ID only, which may result in 401 errors
+- **Rate Limits**: Twitch API has rate limits (varies by authentication method)
+- **Production**: Add both variables as environment variables in your deployment settings (Vercel)
+
+**What the credentials enable:**
+- Fetch your public videos/clips from Twitch
+- Get video metadata (title, description, thumbnails, duration)
+- View counts and statistics
+- Video URLs
+
+**Troubleshooting:**
+- **401 Error**: Twitch Helix API may require OAuth authentication, not just Client ID. This is a known limitation - Twitch's API requires OAuth for most endpoints
+- **404 Error**: Channel name may be incorrect. Double-check your exact Twitch username
+- **403 Error**: Client ID may be invalid or the API endpoint may require different authentication
+
+**Note on Twitch API Limitations:**
+- Twitch's Helix API requires OAuth 2.0 authentication for most video-related endpoints
+- Using only a Client ID may result in 401 errors
+- For full functionality, you may need to implement OAuth flow (beyond the scope of this basic setup)
+- The current implementation will gracefully handle errors and return empty arrays if authentication fails
 
 ## ⚙️ Site Configuration
 
