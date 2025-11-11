@@ -9,7 +9,7 @@ const socials = [
   { name: "BlueSky", url: "https://bsky.app/profile/"+(process.env.SOCIAL_HANDLE||"voxhash")+".bsky.social" },
   { name: "GitHub", url: "https://github.com/"+(process.env.GITHUB_USERNAME||"VoxHash") },
   { name: "Reddit", url: "https://reddit.com/u/"+(process.env.SOCIAL_HANDLE||"voxhash") },
-  { name: "LinkedIn", url: "https://linkedin.com/in/"+(process.env.SOCIAL_HANDLE||"voxhash") },
+  { name: "LinkedIn", url: "https://linkedin.com/in/"+(process.env.LINKEDIN_USERNAME||"voxhash") },
   { name: "Telegram", url: "https://t.me/"+(process.env.SOCIAL_HANDLE||"voxhash") }
 ];
 
