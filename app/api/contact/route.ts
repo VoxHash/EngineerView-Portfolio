@@ -9,6 +9,7 @@ interface ContactFormData {
   name: string;
   email: string;
   message: string;
+  [key: string]: unknown;
 }
 
 // Rate limit configuration for contact form

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Calendar, GitCommit, GitPullRequest, GitBranch, Issue, Star, ExternalLink } from "lucide-react";
+import { Calendar, GitCommit, GitPullRequest, GitBranch, AlertCircle, Star, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import type { GitHubActivity } from "@/lib/github";
 
@@ -41,7 +41,7 @@ export default function GitHubActivity({ limit = 10 }: { limit?: number }) {
       case 'PullRequestEvent':
         return <GitPullRequest className="h-4 w-4" />;
       case 'IssuesEvent':
-        return <Issue className="h-4 w-4" />;
+        return <AlertCircle className="h-4 w-4" />;
       case 'CreateEvent':
         return <GitBranch className="h-4 w-4" />;
       case 'WatchEvent':
