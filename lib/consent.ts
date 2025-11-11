@@ -14,6 +14,7 @@ export interface ConsentSettings {
   functionality_storage?: ConsentState;
   personalization_storage?: ConsentState;
   security_storage?: ConsentState;
+  [key: string]: ConsentState | undefined;
 }
 
 // Note: gtag type is declared in components/Analytics.tsx to avoid conflicts
@@ -37,7 +38,8 @@ export function initializeConsentMode(defaultConsent: ConsentSettings = {}) {
     ...defaultConsent,
   };
 
-  window.gtag('consent', 'default', defaultState);
+  // Cast to Record<string, unknown> for gtag compatibility
+  window.gtag('consent', 'default', defaultState as Record<string, unknown>);
 }
 
 /**
@@ -49,7 +51,8 @@ export function updateConsentMode(consent: ConsentSettings) {
     return;
   }
 
-  window.gtag('consent', 'update', consent);
+  // Cast to Record<string, unknown> for gtag compatibility
+  window.gtag('consent', 'update', consent as Record<string, unknown>);
 }
 
 /**
