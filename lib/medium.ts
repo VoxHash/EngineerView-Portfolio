@@ -11,6 +11,7 @@ export interface MediumPost {
   slug: string;
   readTime: string;
   featured: boolean;
+  thumbnail?: string;
 }
 
 export interface MediumRSSItem {
