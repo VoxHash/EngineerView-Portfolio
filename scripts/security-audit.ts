@@ -39,7 +39,7 @@ function runSecurityAudit(): AuditResult {
     if (vulnerabilities.critical > 0) {
       console.log('\n❌ Critical vulnerabilities found!');
       console.log('   Run "npm audit fix" to attempt automatic fixes.');
-      return vulnerabilities;
+      return { vulnerabilities };
     }
 
     if (vulnerabilities.high > 0) {
@@ -49,7 +49,7 @@ function runSecurityAudit(): AuditResult {
       console.log('\n✅ No critical or high severity vulnerabilities found.');
     }
 
-    return vulnerabilities;
+    return { vulnerabilities };
   } catch (error: any) {
     if (error.status === 1) {
       // npm audit exits with code 1 when vulnerabilities are found
@@ -62,14 +62,14 @@ function runSecurityAudit(): AuditResult {
           moderate: audit.metadata?.vulnerabilities?.moderate || 0,
           low: audit.metadata?.vulnerabilities?.low || 0,
         };
-        return vulnerabilities;
+        return { vulnerabilities };
       } catch {
         // If parsing fails, return zeros
-        return { critical: 0, high: 0, moderate: 0, low: 0 };
+        return { vulnerabilities: { critical: 0, high: 0, moderate: 0, low: 0 } };
       }
     }
     console.error('Error running security audit:', error);
-    return { critical: 0, high: 0, moderate: 0, low: 0 };
+    return { vulnerabilities: { critical: 0, high: 0, moderate: 0, low: 0 } };
   }
 }
 
@@ -77,7 +77,7 @@ function main() {
   const result = runSecurityAudit();
   
   // Exit with error code if critical vulnerabilities found
-  if (result.critical > 0) {
+  if (result.vulnerabilities.critical > 0) {
     process.exit(1);
   }
   
