@@ -65,10 +65,13 @@ export default function ConsentBanner() {
   };
 
   const toggleConsent = (key: keyof ConsentSettings) => {
-    setConsentSettings(prev => ({
-      ...prev,
-      [key]: prev[key] === 'granted' ? 'denied' : 'granted',
-    }));
+    setConsentSettings(prev => {
+      const newValue: ConsentState = prev[key] === 'granted' ? 'denied' : 'granted';
+      return {
+        ...prev,
+        [key]: newValue,
+      };
+    });
   };
 
   if (!showBanner) {
