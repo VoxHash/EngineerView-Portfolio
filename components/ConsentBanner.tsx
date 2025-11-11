@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { X, Cookie, Settings } from 'lucide-react';
-import { grantAllConsent, denyAllConsent, storeConsent, getStoredConsent, updateConsentMode, type ConsentSettings } from '@/lib/consent';
+import { grantAllConsent, denyAllConsent, storeConsent, getStoredConsent, updateConsentMode, type ConsentSettings, type ConsentState } from '@/lib/consent';
 
 export default function ConsentBanner() {
   const [showBanner, setShowBanner] = useState(false);
