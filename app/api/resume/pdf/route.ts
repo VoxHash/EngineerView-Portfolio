@@ -5,6 +5,10 @@ import { createSuccessResponse, handleError } from '@/lib/errors';
 import { getCacheControlHeader } from '@/lib/cache';
 import puppeteer from 'puppeteer';
 
+// Force dynamic rendering - this route should never be statically generated
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function GET(request: NextRequest) {
   try {
     // Fetch data from the website
@@ -350,34 +354,89 @@ export async function GET(request: NextRequest) {
     `;
 
     // Generate PDF using Puppeteer
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+    // Check if we're in a build environment where Puppeteer might not work
+    const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build';
     
-    const page = await browser.newPage();
-    await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
-    
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '20mm',
-        right: '20mm',
-        bottom: '20mm',
-        left: '20mm'
-      }
-    });
-    
-    await browser.close();
+    if (isBuildTime) {
+      // During build, return a placeholder or skip PDF generation
+      return NextResponse.json(
+        { 
+          error: 'PDF generation is not available during build time. Please access this endpoint at runtime.',
+          message: 'This endpoint generates PDFs on-demand and cannot be pre-rendered.'
+        },
+        { status: 503 }
+      );
+    }
 
-    return new NextResponse(pdfBuffer, {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="VoxHash_Resume.pdf"',
-        'Cache-Control': 'no-cache',
-      },
-    });
+    let browser;
+    try {
+      browser = await puppeteer.launch({
+        headless: true,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--single-process',
+          '--disable-gpu'
+        ],
+        // Use system Chrome if available, otherwise use bundled
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+      });
+    } catch (error) {
+      console.error('Failed to launch Puppeteer:', error);
+      return NextResponse.json(
+        {
+          error: 'PDF generation service is currently unavailable',
+          message: 'Chrome/Chromium is not available in this environment. This is expected in some CI/CD environments.',
+          details: error instanceof Error ? error.message : 'Unknown error'
+        },
+        { status: 503 }
+      );
+    }
+    
+    let page;
+    try {
+      page = await browser.newPage();
+      await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+      
+      const pdfBuffer = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: {
+          top: '20mm',
+          right: '20mm',
+          bottom: '20mm',
+          left: '20mm'
+        }
+      });
+      
+      return new NextResponse(pdfBuffer, {
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': 'attachment; filename="VoxHash_Resume.pdf"',
+          'Cache-Control': 'no-cache',
+        },
+      });
+    } finally {
+      // Always close browser, even if PDF generation fails
+      if (page) {
+        try {
+          await page.close();
+        } catch (e) {
+          console.error('Error closing page:', e);
+        }
+      }
+      if (browser) {
+        try {
+          await browser.close();
+        } catch (e) {
+          console.error('Error closing browser:', e);
+        }
+      }
+    }
 
   } catch (error) {
     console.error('Error generating PDF resume:', error);
