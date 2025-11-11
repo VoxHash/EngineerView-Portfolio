@@ -199,7 +199,17 @@ export async function fetchYouTubeVideosAPI(
     }));
 
   } catch (error) {
-    console.error('Error fetching YouTube videos from API:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Error fetching YouTube videos from API:', errorMessage);
+    
+    // Log more details for debugging
+    if (errorMessage.includes('403')) {
+      console.warn('YouTube API 403: Check API key validity, restrictions, or channel ID');
+    } else if (errorMessage.includes('401')) {
+      console.warn('YouTube API 401: API key may be invalid or expired');
+    }
+    
+    // Return empty array to gracefully handle errors
     return [];
   }
 }
@@ -263,7 +273,17 @@ export async function fetchTwitchVideos(
     }));
 
   } catch (error) {
-    console.error('Error fetching Twitch videos:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Error fetching Twitch videos:', errorMessage);
+    
+    // Log more details for debugging
+    if (errorMessage.includes('401')) {
+      console.warn('Twitch API 401: Client ID may be invalid. Twitch API may require OAuth authentication.');
+    } else if (errorMessage.includes('404')) {
+      console.warn('Twitch API 404: Channel name may be incorrect or user not found');
+    }
+    
+    // Return empty array to gracefully handle errors
     return [];
   }
 }
