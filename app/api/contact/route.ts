@@ -307,7 +307,7 @@ export async function POST(request: NextRequest) {
                               <td style="width: 40px; vertical-align: top; padding-right: 12px;">
                                 <table role="presentation" cellspacing="0" cellpadding="0" border="0">
                                   <tr>
-                                    <td style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(124, 58, 237, 0.15); text-align: center; vertical-align: middle; font-size: 20px; line-height: 40px;">⏱️</td>
+                                    <td style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(124, 58, 237, 0.1); display: flex; align-items: center; justify-content: center; font-size: 18px">⏱️</td>
                                   </tr>
                                 </table>
                               </td>
@@ -555,7 +555,7 @@ export async function POST(request: NextRequest) {
                               <td style="width: 40px; vertical-align: top; padding-right: 12px;">
                                 <table role="presentation" cellspacing="0" cellpadding="0" border="0">
                                   <tr>
-                                    <td style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(124, 58, 237, 0.15); text-align: center; vertical-align: middle; font-size: 20px; line-height: 40px;">⏱️</td>
+                                    <td style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(124, 58, 237, 0.1); display: flex; align-items: center; justify-content: center; font-size: 18px">⏱️</td>
                                   </tr>
                                 </table>
                               </td>
