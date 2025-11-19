@@ -12,6 +12,10 @@ interface ContactFormData {
   [key: string]: unknown;
 }
 
+// Email configuration
+const NOREPLY_EMAIL = process.env.NOREPLY_EMAIL || 'noreply@voxhash.dev';
+const EMAIL_FROM_NAME = process.env.EMAIL_FROM_NAME || 'Portfolio Contact';
+
 // Rate limit configuration for contact form
 const rateLimitConfig = {
   maxRequests: 5, // 5 requests per window
@@ -130,7 +134,7 @@ export async function POST(request: NextRequest) {
       const resend = new Resend(process.env.RESEND_API_KEY);
 
       const emailData = {
-        from: 'Portfolio Contact <noreply@voxhash.dev>',
+        from: `${EMAIL_FROM_NAME} <${NOREPLY_EMAIL}>`,
         to: [SITE.email],
         subject: `New Contact Form Submission from ${name}`,
         html: `
@@ -261,7 +265,7 @@ export async function POST(request: NextRequest) {
 
       // Send thank you email to the user
       const thankYouEmail = {
-        from: 'Portfolio Contact <noreply@voxhash.dev>',
+        from: `${EMAIL_FROM_NAME} <${NOREPLY_EMAIL}>`,
         to: [email],
         subject: `Thank you for contacting ${SITE.name}`,
         html: `
@@ -300,10 +304,14 @@ export async function POST(request: NextRequest) {
                         <div style="background: linear-gradient(to right, rgba(124, 58, 237, 0.1) 0%, rgba(196, 181, 253, 0.1) 100%); border: 1px solid rgba(124, 58, 237, 0.2); border-left: 4px solid #7C3AED; padding: 20px; margin: 24px 0; border-radius: 12px;">
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
-                              <td style="width: 40px; vertical-align: top;">
-                                <div style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(124, 58, 237, 0.15); display: flex; align-items: center; justify-content: center; font-size: 20px;">⏱️</div>
+                              <td style="width: 40px; vertical-align: top; padding-right: 12px;">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                                  <tr>
+                                    <td style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(124, 58, 237, 0.15); text-align: center; vertical-align: middle; font-size: 20px; line-height: 40px;">⏱️</td>
+                                  </tr>
+                                </table>
                               </td>
-                              <td style="vertical-align: top; padding-left: 12px;">
+                              <td style="vertical-align: top;">
                                 <p style="margin: 0 0 8px 0; color: #7C3AED; font-size: 15px; line-height: 1.6; font-weight: 600;">
                                   Response Time
                                 </p>
@@ -379,7 +387,7 @@ export async function POST(request: NextRequest) {
       });
 
       const mailOptions = {
-        from: process.env.SMTP_FROM || SITE.email,
+        from: process.env.SMTP_FROM || `${EMAIL_FROM_NAME} <${NOREPLY_EMAIL}>`,
         to: SITE.email,
         subject: `New Contact Form Submission from ${name}`,
         html: `
@@ -505,7 +513,7 @@ export async function POST(request: NextRequest) {
       
       // Send thank you email to the user
       const thankYouMailOptions = {
-        from: process.env.SMTP_FROM || SITE.email,
+        from: process.env.SMTP_FROM || `${EMAIL_FROM_NAME} <${NOREPLY_EMAIL}>`,
         to: email,
         subject: `Thank you for contacting ${SITE.name}`,
         html: `
@@ -544,10 +552,14 @@ export async function POST(request: NextRequest) {
                         <div style="background: linear-gradient(to right, rgba(124, 58, 237, 0.1) 0%, rgba(196, 181, 253, 0.1) 100%); border: 1px solid rgba(124, 58, 237, 0.2); border-left: 4px solid #7C3AED; padding: 20px; margin: 24px 0; border-radius: 12px;">
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
-                              <td style="width: 40px; vertical-align: top;">
-                                <div style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(124, 58, 237, 0.15); display: flex; align-items: center; justify-content: center; font-size: 20px;">⏱️</div>
+                              <td style="width: 40px; vertical-align: top; padding-right: 12px;">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                                  <tr>
+                                    <td style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(124, 58, 237, 0.15); text-align: center; vertical-align: middle; font-size: 20px; line-height: 40px;">⏱️</td>
+                                  </tr>
+                                </table>
                               </td>
-                              <td style="vertical-align: top; padding-left: 12px;">
+                              <td style="vertical-align: top;">
                                 <p style="margin: 0 0 8px 0; color: #7C3AED; font-size: 15px; line-height: 1.6; font-weight: 600;">
                                   Response Time
                                 </p>
