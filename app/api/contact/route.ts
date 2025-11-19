@@ -284,7 +284,7 @@ export async function POST(request: NextRequest) {
                     <!-- Header with gradient -->
                     <tr>
                       <td style="background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%); padding: 40px; text-align: center;">
-                        <div style="display: inline-block; width: 48px; height: 48px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.2); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 24px">✉️</div>
+                        <div style="display: inline-block; width: 48px; height: 48px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.2); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 24px;">✉️</div>
                         <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600; letter-spacing: -0.5px;">
                           Thank You for Reaching Out!
                         </h1>
@@ -307,7 +307,7 @@ export async function POST(request: NextRequest) {
                               <td style="width: 40px; vertical-align: top; padding-right: 12px;">
                                 <table role="presentation" cellspacing="0" cellpadding="0" border="0">
                                   <tr>
-                                    <td style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(124, 58, 237, 0.1); display: flex; align-items: center; justify-content: center; font-size: 18px">⏱️</td>
+                                    <td style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(124, 58, 237, 0.1); display: flex; align-items: center; justify-content: center; font-size: 18px;">⏱️</td>
                                   </tr>
                                 </table>
                               </td>
@@ -532,7 +532,7 @@ export async function POST(request: NextRequest) {
                     <!-- Header with gradient -->
                     <tr>
                       <td style="background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%); padding: 40px; text-align: center;">
-                        <div style="display: inline-block; width: 48px; height: 48px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.2); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 24px">✉️</div>
+                        <div style="display: inline-block; width: 48px; height: 48px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.2); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 24px;">✉️</div>
                         <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600; letter-spacing: -0.5px;">
                           Thank You for Reaching Out!
                         </h1>
@@ -555,7 +555,7 @@ export async function POST(request: NextRequest) {
                               <td style="width: 40px; vertical-align: top; padding-right: 12px;">
                                 <table role="presentation" cellspacing="0" cellpadding="0" border="0">
                                   <tr>
-                                    <td style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(124, 58, 237, 0.1); display: flex; align-items: center; justify-content: center; font-size: 18px">⏱️</td>
+                                    <td style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(124, 58, 237, 0.1); display: flex; align-items: center; justify-content: center; font-size: 18px;">⏱️</td>
                                   </tr>
                                 </table>
                               </td>
