@@ -97,7 +97,7 @@ export default function Timeline() {
                   {item.skills.map((skill) => (
                     <span 
                       key={skill}
-                      className="badge bg-brand/10 text-brand border-brand/20 text-xs"
+                      className="badge bg-brand/20 text-brand border-brand/30 backdrop-blur-md text-xs"
                     >
                       {skill}
                     </span>

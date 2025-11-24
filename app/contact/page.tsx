@@ -94,7 +94,7 @@ export default function ContactPage(){
             <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
             <div className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-brand/20 backdrop-blur-md border border-brand/30 flex items-center justify-center shadow-lg shadow-brand/20">
                   <Mail className="h-6 w-6 text-brand" />
                 </div>
                 <div>
@@ -109,7 +109,7 @@ export default function ContactPage(){
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-brand/20 backdrop-blur-md border border-brand/30 flex items-center justify-center shadow-lg shadow-brand/20">
                   <Phone className="h-6 w-6 text-brand" />
                 </div>
                 <div>
@@ -119,7 +119,7 @@ export default function ContactPage(){
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-brand/20 backdrop-blur-md border border-brand/30 flex items-center justify-center shadow-lg shadow-brand/20">
                   <MapPin className="h-6 w-6 text-brand" />
                 </div>
                 <div>
@@ -130,7 +130,7 @@ export default function ContactPage(){
             </div>
           </div>
 
-          <div className="card p-6 bg-gradient-to-r from-brand/10 to-brand-light/10 border-brand/20">
+          <div className="card-strong p-6 bg-gradient-to-r from-brand/20 to-brand-light/20 border-brand/30 backdrop-blur-lg">
             <h3 className="text-lg font-semibold mb-3 text-brand">Response Time</h3>
             <p className="text-neutral-600 dark:text-neutral-300 text-sm">
               I typically respond to messages within 24 hours. For urgent matters, 
@@ -146,7 +146,7 @@ export default function ContactPage(){
           {/* Status Messages */}
           {status.type === 'success' && (
             <div 
-              className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-3"
+              className="mb-6 p-4 bg-green-50/80 dark:bg-green-900/30 backdrop-blur-md border border-green-200/50 dark:border-green-800/50 rounded-lg flex items-center gap-3 shadow-lg shadow-green-500/10"
               role="alert"
               aria-live="polite"
             >
@@ -157,7 +157,7 @@ export default function ContactPage(){
 
           {status.type === 'error' && (
             <div 
-              className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-3"
+              className="mb-6 p-4 bg-red-50/80 dark:bg-red-900/30 backdrop-blur-md border border-red-200/50 dark:border-red-800/50 rounded-lg flex items-center gap-3 shadow-lg shadow-red-500/10"
               role="alert"
               aria-live="assertive"
             >
@@ -180,7 +180,7 @@ export default function ContactPage(){
                   onChange={handleInputChange}
                   required
                   aria-required="true"
-                  className="w-full rounded-xl bg-neutral-100 dark:bg-neutral-800 px-4 py-3 border border-neutral-200 dark:border-neutral-700 focus:ring-2 focus:ring-brand/20 focus:border-brand transition-colors focus-visible:outline-2 focus-visible:outline-brand focus-visible:outline-offset-2"
+                  className="w-full rounded-xl bg-white/20 dark:bg-neutral-800/30 backdrop-blur-md border border-white/20 dark:border-white/10 px-4 py-3 focus:ring-2 focus:ring-brand/30 focus:border-brand focus:bg-white/30 dark:focus:bg-neutral-800/50 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-brand focus-visible:outline-offset-2"
                   placeholder="Your full name"
                 />
               </div>
@@ -197,7 +197,7 @@ export default function ContactPage(){
                   required
                   aria-required="true"
                   autoComplete="email"
-                  className="w-full rounded-xl bg-neutral-100 dark:bg-neutral-800 px-4 py-3 border border-neutral-200 dark:border-neutral-700 focus:ring-2 focus:ring-brand/20 focus:border-brand transition-colors focus-visible:outline-2 focus-visible:outline-brand focus-visible:outline-offset-2"
+                  className="w-full rounded-xl bg-white/20 dark:bg-neutral-800/30 backdrop-blur-md border border-white/20 dark:border-white/10 px-4 py-3 focus:ring-2 focus:ring-brand/30 focus:border-brand focus:bg-white/30 dark:focus:bg-neutral-800/50 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-brand focus-visible:outline-offset-2"
                   placeholder="your.email@example.com"
                 />
               </div>
@@ -215,7 +215,7 @@ export default function ContactPage(){
                 required
                 aria-required="true"
                 rows={6}
-                className="w-full rounded-xl bg-neutral-100 dark:bg-neutral-800 px-4 py-3 border border-neutral-200 dark:border-neutral-700 focus:ring-2 focus:ring-brand/20 focus:border-brand transition-colors resize-none focus-visible:outline-2 focus-visible:outline-brand focus-visible:outline-offset-2"
+                className="w-full rounded-xl bg-white/20 dark:bg-neutral-800/30 backdrop-blur-md border border-white/20 dark:border-white/10 px-4 py-3 focus:ring-2 focus:ring-brand/30 focus:border-brand focus:bg-white/30 dark:focus:bg-neutral-800/50 transition-all duration-200 resize-none focus-visible:outline-2 focus-visible:outline-brand focus-visible:outline-offset-2"
                 placeholder="Tell me about your project, collaboration idea, or just say hello..."
               />
             </div>

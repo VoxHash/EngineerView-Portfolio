@@ -37,7 +37,7 @@ export default function RepoCard({repo}:{repo:Repo}){
             <ExternalLink className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200" aria-hidden="true" />
           </a>
         </h3>
-        <span className="badge bg-brand/10 text-brand border-brand/20 group-hover:bg-brand/20 transition-colors duration-200">
+        <span className="badge bg-brand/20 text-brand border-brand/30 group-hover:bg-brand/30 backdrop-blur-md transition-all duration-200">
           {repo.language || "Other"}
         </span>
       </div>
@@ -52,7 +52,7 @@ export default function RepoCard({repo}:{repo:Repo}){
           {repo.topics.slice(0, 3).map((topic) => (
             <span
               key={topic}
-              className="text-xs px-2 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 rounded-md"
+              className="text-xs px-2 py-1 bg-white/20 dark:bg-neutral-800/30 backdrop-blur-sm border border-white/20 dark:border-white/10 text-neutral-600 dark:text-neutral-400 rounded-md"
             >
               {topic}
             </span>

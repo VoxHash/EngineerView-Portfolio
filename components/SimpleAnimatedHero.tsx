@@ -81,7 +81,7 @@ export default function SimpleAnimatedHero() {
       </div>
 
       {/* Call to Action Banner */}
-      <div className="mt-12 card p-6 text-center bg-gradient-to-r from-brand/10 to-brand-light/10 border-brand/20">
+      <div className="mt-12 card-strong p-6 text-center bg-gradient-to-r from-brand/20 to-brand-light/20 border-brand/30 backdrop-blur-lg">
         <h3 className="text-xl font-semibold mb-2">Open to Remote Roles</h3>
         <p className="text-neutral-600 dark:text-neutral-300 mb-4">
           Looking for exciting opportunities in full-stack development, AI/ML, or systems engineering.

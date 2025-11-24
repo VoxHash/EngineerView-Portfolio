@@ -167,7 +167,7 @@ export default function SkillsMatrix() {
               {category.skills.map((skill, skillIndex) => (
                 <motion.div
                   key={skill.name}
-                  className="p-4 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:border-brand/50 transition-colors duration-200"
+                  className="p-4 rounded-lg border border-white/20 dark:border-white/10 bg-white/5 dark:bg-neutral-800/10 backdrop-blur-sm hover:border-brand/50 hover:bg-white/10 dark:hover:bg-neutral-800/20 transition-all duration-200 shadow-sm"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
                   transition={{ 
@@ -213,7 +213,7 @@ export default function SkillsMatrix() {
 
       {/* Learning Goals */}
       <motion.div
-        className="card p-8 bg-gradient-to-r from-brand/10 to-brand-light/10 border-brand/20"
+        className="card-strong p-8 bg-gradient-to-r from-brand/20 to-brand-light/20 border-brand/30 backdrop-blur-lg"
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ delay: 0.6, duration: 0.6 }}

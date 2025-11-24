@@ -52,7 +52,7 @@ export default function Header(){
   
   return (
     <header 
-      className="sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-800 bg-white/70 dark:bg-neutral-950/70 backdrop-blur"
+      className="sticky top-0 z-40 border-b border-white/20 dark:border-white/10 bg-white/10 dark:bg-neutral-950/20 backdrop-blur-xl backdrop-saturate-150 shadow-lg shadow-black/5 dark:shadow-black/20"
       role="banner"
     >
       <div className="container flex h-16 items-center justify-between">
@@ -107,7 +107,7 @@ export default function Header(){
         id="mobile-menu"
         ref={mobileMenuRef}
         className={clsx(
-          "md:hidden mobile-drawer fixed top-16 right-0 h-screen w-80 bg-white dark:bg-neutral-900 border-l border-neutral-200 dark:border-neutral-800 shadow-xl z-50",
+          "md:hidden mobile-drawer fixed top-16 right-0 h-screen w-80 bg-white/20 dark:bg-neutral-900/30 border-l border-white/30 dark:border-white/20 shadow-2xl shadow-black/20 dark:shadow-black/40 z-50",
           mobileMenuOpen && "open"
         )}
         role="navigation"
@@ -120,8 +120,8 @@ export default function Header(){
               key={item.href} 
               href={item.href} 
               className={clsx(
-                "text-lg py-2 px-4 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-brand focus-visible:outline-offset-2",
-                pathname === item.href && "text-brand bg-neutral-100 dark:bg-neutral-800"
+                "text-lg py-2 px-4 rounded-lg hover:bg-white/20 dark:hover:bg-white/10 backdrop-blur-sm transition-all duration-200 focus-visible:outline-2 focus-visible:outline-brand focus-visible:outline-offset-2",
+                pathname === item.href && "text-brand bg-white/20 dark:bg-white/10 backdrop-blur-md"
               )}
               onClick={() => setMobileMenuOpen(false)}
               aria-current={pathname === item.href ? 'page' : undefined}
@@ -144,7 +144,7 @@ export default function Header(){
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}

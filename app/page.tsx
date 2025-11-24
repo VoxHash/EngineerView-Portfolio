@@ -68,7 +68,7 @@ export default async function Home(){
         </div>
       </div>
 
-      <div className="mt-16 card p-8">
+      <div className="mt-16 card-strong p-8">
         <h3 className="text-2xl font-semibold mb-6 text-center">What I do</h3>
         <div className="grid md:grid-cols-2 gap-6 text-center">
           <div>

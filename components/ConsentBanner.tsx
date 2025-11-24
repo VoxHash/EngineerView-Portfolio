@@ -85,7 +85,7 @@ export default function ConsentBanner() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6">
-      <div className="max-w-4xl mx-auto card border-2 border-brand/20 shadow-2xl p-4 md:p-6">
+      <div className="max-w-4xl mx-auto card-strong border-2 border-brand/30 shadow-2xl p-4 md:p-6">
         {!showSettings ? (
           <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
             <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -153,7 +153,7 @@ export default function ConsentBanner() {
             </p>
 
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-900/50 rounded-lg gap-4">
+              <div className="flex items-center justify-between p-4 bg-white/20 dark:bg-neutral-900/30 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-lg gap-4 shadow-sm">
                 <div className="flex-1 min-w-0">
                   <h4 className="font-medium text-sm md:text-base text-neutral-900 dark:text-neutral-100 mb-1">Security Storage</h4>
                   <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
@@ -165,7 +165,7 @@ export default function ConsentBanner() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-900/50 rounded-lg gap-4">
+              <div className="flex items-center justify-between p-4 bg-white/20 dark:bg-neutral-900/30 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-lg gap-4 shadow-sm">
                 <div className="flex-1 min-w-0">
                   <h4 className="font-medium text-sm md:text-base text-neutral-900 dark:text-neutral-100 mb-1">Analytics Storage</h4>
                   <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
@@ -183,7 +183,7 @@ export default function ConsentBanner() {
                 </label>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-900/50 rounded-lg gap-4">
+              <div className="flex items-center justify-between p-4 bg-white/20 dark:bg-neutral-900/30 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-lg gap-4 shadow-sm">
                 <div className="flex-1 min-w-0">
                   <h4 className="font-medium text-sm md:text-base text-neutral-900 dark:text-neutral-100 mb-1">Functionality Storage</h4>
                   <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
@@ -201,7 +201,7 @@ export default function ConsentBanner() {
                 </label>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-900/50 rounded-lg gap-4">
+              <div className="flex items-center justify-between p-4 bg-white/20 dark:bg-neutral-900/30 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-lg gap-4 shadow-sm">
                 <div className="flex-1 min-w-0">
                   <h4 className="font-medium text-sm md:text-base text-neutral-900 dark:text-neutral-100 mb-1">Personalization Storage</h4>
                   <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
@@ -219,7 +219,7 @@ export default function ConsentBanner() {
                 </label>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-neutral-50 dark:bg-neutral-900/50 rounded-lg gap-4">
+              <div className="flex items-center justify-between p-4 bg-white/20 dark:bg-neutral-900/30 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-lg gap-4 shadow-sm">
                 <div className="flex-1 min-w-0">
                   <h4 className="font-medium text-sm md:text-base text-neutral-900 dark:text-neutral-100 mb-1">Ad Storage</h4>
                   <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">

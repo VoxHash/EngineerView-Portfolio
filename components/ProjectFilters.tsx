@@ -101,7 +101,7 @@ export default function ProjectFilters({ repos, onFilterChange }: ProjectFilters
           placeholder="Search projects..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-3 pl-10 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all"
+          className="w-full px-4 py-3 pl-10 bg-white/20 dark:bg-neutral-800/30 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand focus:bg-white/30 dark:focus:bg-neutral-800/50 transition-all"
           aria-label="Search projects"
         />
         <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-neutral-400" aria-hidden="true" />
@@ -118,7 +118,7 @@ export default function ProjectFilters({ repos, onFilterChange }: ProjectFilters
             id="language-filter"
             value={selectedLanguage || ''}
             onChange={(e) => setSelectedLanguage(e.target.value || null)}
-            className="px-4 py-2 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm"
+            className="px-4 py-2 bg-white/20 dark:bg-neutral-800/30 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand focus:bg-white/30 dark:focus:bg-neutral-800/50 transition-all text-sm"
             aria-label="Filter by programming language"
           >
             <option value="">All Languages</option>
@@ -137,7 +137,7 @@ export default function ProjectFilters({ repos, onFilterChange }: ProjectFilters
             id="topic-filter"
             value={selectedTopic || ''}
             onChange={(e) => setSelectedTopic(e.target.value || null)}
-            className="px-4 py-2 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm"
+            className="px-4 py-2 bg-white/20 dark:bg-neutral-800/30 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand focus:bg-white/30 dark:focus:bg-neutral-800/50 transition-all text-sm"
             aria-label="Filter by topic"
           >
             <option value="">All Topics</option>
@@ -156,7 +156,7 @@ export default function ProjectFilters({ repos, onFilterChange }: ProjectFilters
             id="sort-filter"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'stars' | 'updated' | 'name')}
-            className="px-4 py-2 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm"
+            className="px-4 py-2 bg-white/20 dark:bg-neutral-800/30 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand focus:bg-white/30 dark:focus:bg-neutral-800/50 transition-all text-sm"
             aria-label="Sort projects"
           >
             <option value="stars">Most Stars</option>
@@ -173,7 +173,7 @@ export default function ProjectFilters({ repos, onFilterChange }: ProjectFilters
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={clearFilters}
-              className="px-4 py-2 text-sm text-brand hover:text-brand-dark bg-brand/10 hover:bg-brand/20 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-brand focus-visible:outline-offset-2 flex items-center gap-2"
+              className="px-4 py-2 text-sm text-brand hover:text-brand-dark bg-brand/20 hover:bg-brand/30 backdrop-blur-md border border-brand/30 rounded-lg transition-all duration-200 focus-visible:outline-2 focus-visible:outline-brand focus-visible:outline-offset-2 flex items-center gap-2 shadow-sm"
               aria-label="Clear all filters"
             >
               <X className="h-4 w-4" aria-hidden="true" />
@@ -193,7 +193,7 @@ export default function ProjectFilters({ repos, onFilterChange }: ProjectFilters
             className="flex flex-wrap gap-2"
           >
             {selectedLanguage && (
-              <span className="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-full text-sm">
+              <span className="inline-flex items-center gap-2 px-3 py-1 bg-brand/20 backdrop-blur-md border border-brand/30 text-brand rounded-full text-sm shadow-sm">
                 Language: {selectedLanguage}
                 <button
                   onClick={() => setSelectedLanguage(null)}
@@ -205,7 +205,7 @@ export default function ProjectFilters({ repos, onFilterChange }: ProjectFilters
               </span>
             )}
             {selectedTopic && (
-              <span className="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-full text-sm">
+              <span className="inline-flex items-center gap-2 px-3 py-1 bg-brand/20 backdrop-blur-md border border-brand/30 text-brand rounded-full text-sm shadow-sm">
                 Topic: {selectedTopic}
                 <button
                   onClick={() => setSelectedTopic(null)}
@@ -217,7 +217,7 @@ export default function ProjectFilters({ repos, onFilterChange }: ProjectFilters
               </span>
             )}
             {searchQuery && (
-              <span className="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-full text-sm">
+              <span className="inline-flex items-center gap-2 px-3 py-1 bg-brand/20 backdrop-blur-md border border-brand/30 text-brand rounded-full text-sm shadow-sm">
                 Search: &quot;{searchQuery}&quot;
                 <button
                   onClick={() => setSearchQuery('')}

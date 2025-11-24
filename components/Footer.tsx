@@ -3,7 +3,7 @@ import { SITE } from "@/lib/site";
 export default function Footer(){
   return (
     <footer 
-      className="border-t border-neutral-200 dark:border-neutral-800 mt-16 py-10"
+      className="border-t border-white/20 dark:border-white/10 bg-white/5 dark:bg-neutral-950/10 backdrop-blur-md backdrop-saturate-150 mt-16 py-10"
       role="contentinfo"
     >
       <div className="container flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-400">
