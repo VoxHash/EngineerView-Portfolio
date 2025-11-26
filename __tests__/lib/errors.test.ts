@@ -58,7 +58,7 @@ describe('Error Utilities', () => {
     });
 
     it('should detect missing fields', () => {
-      const data = { name: 'John', email: '' };
+      const data: { name?: string; email?: string; message?: string } = { name: 'John', email: '' };
       const result = validateRequiredFields(data, ['name', 'email', 'message']);
       
       expect(result.isValid).toBe(false);
