@@ -75,5 +75,9 @@
     "@next/bundle-analyzer": "^14.2.33",
     "tsx": "^4.7.0",
     "@lhci/cli": "^0.12.0"
+  },
+  "overrides": {
+    "js-yaml": "^4.1.1",
+    "glob": "^10.5.0"
   }
 }
