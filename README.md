@@ -1,5 +1,6 @@
 # EnginerView Portfolio
 
+[![Success Metrics Check](https://github.com/VoxHash/EngineerView-Portfolio/actions/workflows/metrics.yml/badge.svg)](https://github.com/VoxHash/EngineerView-Portfolio/actions/workflows/metrics.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
