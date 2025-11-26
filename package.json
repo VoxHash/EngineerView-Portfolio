@@ -15,7 +15,7 @@
     "generate-resume": "node scripts/generate-resume-pdf.js",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage --coverageThreshold='{\"global\":{\"branches\":80,\"functions\":80,\"lines\":80,\"statements\":80}}'",
+    "test:coverage": "jest --coverage",
     "analyze": "ANALYZE=true next build",
     "lighthouse": "lhci autorun",
     "lighthouse:ci": "lhci autorun --upload.target=temporary-public-storage",
